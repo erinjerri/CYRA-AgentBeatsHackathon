@@ -120,6 +120,7 @@ flowchart TB
 
 ```
 CYRA-AgentBeatsHackathon/
+CYRA-AgentBeatsHackathon/
 ├── README.md
 ├── docs/
 │   ├── architecture.md
@@ -127,13 +128,27 @@ CYRA-AgentBeatsHackathon/
 │   └── api-reference.md
 ├── client/
 │   ├── visionOS/
-│   │   ├── ContentView.swift
+│   │   ├── AgentStateSyncService.swift        # NEW (MVP)
+│   │   ├── TaskModel.swift                    # NEW (MVP)
+│   │   ├── MainDashboardView.swift            # NEW (MVP)
+│   │   ├── cyra_agentbeatsApp.swift           # UPDATED (MVP entry point)
+│   │   ├── Assets.xcassets
+│   │
+│   │   # Template / Immersive files (kept for Part 2, not used in MVP)
+│   │   ├── AppModel.swift
+│   │   ├── ImmersiveView.swift
 │   │   ├── SpeechManager.swift
 │   │   ├── VisionManager.swift
-│   │   └── SwiftDataModels.swift
+│   │
+│   │   # Deprecated / replaced files (kept for reference, not compiled)
+│   │   ├── ContentView.swift
+│   │   ├── SwiftDataModels.swift
+│   │   └── SpatialAgentApp.swift
+│   │
 │   └── shared/
 │       ├── Models.swift
 │       └── Networking.swift
+│
 ├── backend/
 │   ├── app/
 │   │   ├── main.py
@@ -154,6 +169,7 @@ CYRA-AgentBeatsHackathon/
 │   │       └── trace.py
 │   ├── requirements.txt
 │   └── Dockerfile
+│
 ├── agents/
 │   ├── green/
 │   │   ├── __init__.py
@@ -176,6 +192,7 @@ CYRA-AgentBeatsHackathon/
 │           ├── __init__.py
 │           ├── a2a_client.py
 │           └── mcp_tools.py
+│
 ├── evaluation/
 │   ├── datasets/
 │   │   ├── visionos_scenarios.json
@@ -185,6 +202,7 @@ CYRA-AgentBeatsHackathon/
 │   │   └── generate_report.py
 │   └── results/
 │       └── .gitkeep
+│
 ├── tests/
 │   ├── unit/
 │   │   ├── test_assessor.py
@@ -196,6 +214,7 @@ CYRA-AgentBeatsHackathon/
 │   └── fixtures/
 │       ├── sample_tasks.json
 │       └── mock_traces.json
+│
 └── scripts/
     ├── setup.sh
     ├── run_locally.sh
@@ -254,8 +273,7 @@ The CYRA framework evaluates agents across these dimensions:
 
 | Time / Part                                        | Task Description                                                                                                                                                                                                                                                                                                                                 | Done |
 |----------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------|
-| Part 1                                  | Refactor architecture to match updated project tree. Define STT → Task creation and VisionKit/CoreML → Task creation. Update Mermaid diagrams to reflect A2A protocol + state matching. Set up local FastAPI backend with file telemetry store. Test endpoints with curl/Postman.                                                               |  ✅
-Completed |
+| Part 1                                  | Refactor architecture to match updated project tree. Define STT → Task creation and VisionKit/CoreML → Task creation. Update Mermaid diagrams to reflect A2A protocol + state matching. Set up local FastAPI backend with file telemetry store. Test endpoints with curl/Postman.                                                               |  ✅ |
 | Part 1                                             | Implement STT → Task creation pipeline in Swift. Implement VisionKit/CoreML → Task creation pipeline. Add OpenAI + Apple FM hooks for intent extraction. Test both flows locally.                                                                                                                                                                |      |
 | Part 1                                             | Deploy FastAPI backend to Lambda.ai. Install deps, run server. Connect Swift → backend (AgentStateSyncService.swift). Test end-to-end: speech/image → task JSON → backend → local state file.                                                                                                                                                    |      |
 | Part 1                                             | Implement A2A protocol v1: Assessor simulates user; multi-round reasoning; prompts for daily task scenarios. Add `/evaluate` endpoint for state matching. Run sample benchmarks.                                                                                                                                                                 |      |
