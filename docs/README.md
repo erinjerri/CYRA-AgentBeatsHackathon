@@ -36,6 +36,8 @@ CYRA, together with its complementary Purple Assessor Agent, forms a reusable, e
 
 # Overview CYRA Tree
 
+# Overview CYRA Tree
+
 ├── visionOS_App/                      # --- [SPATIAL ENVIRONMENT (SWIFT)] ---
 │   ├── SpatialAgentApp.swift          # Entry point; initializes DataHandler & ImmersiveSpace [7]
 │   ├── ImmersiveControlSpace.swift    # 3D environment for agentic "Computer Use" visualization [8]
@@ -49,12 +51,12 @@ CYRA, together with its complementary Purple Assessor Agent, forms a reusable, e
 │       ├── MainDashboardView.swift    # Central 2D window for calendar/to-do monitoring
 │       ├── TaskDetailView.swift       # View for inspecting specific agent-created tasks
 │       └── FinanceOverlayView.swift   # ROADMAP: Secure spatial window for payment confirmation
-│
+
 ├── backend/                           # --- [DATA HANDLER & A2A SERVER (FASTAPI)] ---
 │   ├── main.py                        # Entry point; wraps app with AgentBeats Controller [7, 10]
 │   ├── api/                           # REST/WebSocket endpoints for visionOS state sync
 │   └── services/                      # Pydantic-based business logic for "World State"
-│
+
 ├── agent_bench/                       # --- [EVALUATION ENGINE (AGENTBEATS)] ---
 │   ├── primary_assessor/              # GREEN AGENT: The Task Creator Evaluator [11, 12]
 │   │   ├── executor.py                # Multi-round reasoning and user simulation logic [13, 14]
@@ -64,21 +66,18 @@ CYRA, together with its complementary Purple Assessor Agent, forms a reusable, e
 │   │   ├── state_matching.py          # Compares visionOS DB to annotated goal states [4, 5]
 │   │   └── action_assertions.py       # Verifies tool-use correctness via MCP [16]
 │   └── data_gen/                      # Synthetic scenario generation for tasks [5, 16]
-│
+
 ├── tools/                             # --- [TOOL LAYER] ---
 │   └── mcp_server.py                  # MCP server for dynamic discovery of app functions [13, 17]
-│
+
 ├── config/                            # --- [METADATA] ---
 │   ├── agent_card.toml                # Required for AgentBeats Registry discovery [2, 18]
 │   └── ap2_settings.yaml              # ROADMAP: Credentials for Ampersend SDK
-│
+
 ├── requirements.txt                   # Python dependencies (earthshaker, fastapi, google-adk) [10]
 ├── run.sh                             # CLI: pip install earthshaker && python main.py run [10]
 ├── Procfile                           # DEPLOYMENT: web: agentbeats run_ctrl [19]
 └── README.md                          # Documentation on Tech Stack & agentic reasoning
-
-# To-Do List
-# AgentBeats Hackathon — To‑Do Timeline (Green Agent + LedgerFlow)
 
 | Time Slot | Task Description | Check-off |
 |----------|------------------|-----------|
