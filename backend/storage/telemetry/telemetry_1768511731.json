@@ -1,0 +1,23 @@
+{
+  "timestamp": 1768511731,
+  "user_utterance": "buy apples",
+  "transcribed_text": "",
+  "parsed_intent": "purchase_app",
+  "function_call_name": "process_task",
+  "function_call_args": "{\"user_utterance\": \"buy apples\", \"received_at\": 1768511731, \"source_ip\": \"127.0.0.1\"}",
+  "processing_latency_ms": 2,
+  "task_success": true,
+  "error_type": null,
+  "retry_count": 0,
+  "spatial_action_type": null,
+  "ui_element_targeted": null,
+  "ui_element_selected": false,
+  "gaze_target": null,
+  "gesture_type": null,
+  "interaction_distance": null,
+  "hit_accuracy": 1.0,
+  "transaction_type": "app_purchase",
+  "argument_validation_passed": true,
+  "step_sequence_correctness": 1.0,
+  "task_filename": "task_1768511731.json"
+}
