@@ -82,108 +82,25 @@ CYRA, together with its complementary Purple Assessor Agent, forms a reusable, e
 
 | Time Slot | Task Description | Check-off |
 |----------|------------------|-----------|
+# AgentBeats Hackathon — To‑Do Timeline (Green Agent + LedgerFlow)
 
-| **Day 1, (1.5 hrs)** | 
-Refactor architecture to match updated project tree.  
-Define the two core interaction modalities:  
-• STT → Task creation  
-• Image capture (VisionKit/CoreML) → Task creation  
-Update Mermaid diagrams to reflect A2A protocol + state matching.  
-Set up local FastAPI backend with in-memory/file telemetry store.  
-Test endpoints with curl/Postman. | [x] |
+Repo: https://github.com/erinjerri/CYRA-AgentBeatsHackathon
 
-| **Part 1** | 
-Implement STT → Task creation pipeline in Swift.  
-Implement VisionKit/CoreML → Task creation pipeline.  
-Add OpenAI + Apple Foundation Models hooks for intent extraction.  
-Test both flows locally (no backend yet). | [ ] |
-
-| **Part 1**| 
-Deploy FastAPI backend to **Lambda.ai**.  
-SSH, install deps, run server.  
-Connect Swift → backend (AgentStateSyncService.swift).  
-Test end-to-end: speech/image → task JSON → backend → local state file. | [ ] |
-
-| **Part 1** | 
-Implement **A2A protocol v1**:  
-• Assessor simulates user/merchant  
-• Multi-round reasoning (executor.py)  
-• Prompts for daily task scenarios  
-Add `/evaluate` endpoint for state matching.  
-Run sample benchmarks (tasks.json). | [ ] |
-
-| **Part 1** | 
-Update README + benchmark_design.md with:  
-• A2A protocol  
-• State matching  
-• Action assertions  
-• STT + CV multimodal flows  
-Commit/push. | [ ] |
-
-
-| **Part 1** | Breakfast + review. Spin up Lambda.ai instance. | [ ] |
-
-| **Optional - Finance Agent** | 
-Build **LedgerFlow** (iOS finance agent).  
-Integrate Ampersend SDK (mock AP2 handshake).  
-Implement:  
-• Check Balance  
-• Signature Request  
-• Pending Transaction  
-Test simulated purchase flow (no real Apple Pay). | [ ] |
-
-| **Part 2** | 
-Implement **rubrics**:  
-• state_matching.py (visionOS DB vs goal state)  
-• action_assertions.py (tool-use correctness)  
-Run multi-trial benchmarks for Green Agent + LedgerFlow. | [ ] |
-
-
-| **Part 2** | 
-Spatial enhancements:  
-• ImmersiveControlSpace.swift  
-• Gesture/gaze stubs  
-Test on Vision Pro simulator/device.  
-**If Vision Pro fails → fallback to Meta Quest** (WebXR + WebKit logging). | [ ] |
-
-| **Part 2** | 
-Finalize architecture diagrams + system.mmd.  
-Update README with:  
-• A2A protocol  
-• AP2 handshake simulation  
-• Multimodal task creation  
-• Evaluation rubric | [ ] |
-
-| **Part 2** | 
-End-to-end testing:  
-• Green Agent (task creation via STT + CV)  
-• LedgerFlow (AP2/Ampersend mock purchase)  
-Collect telemetry + evaluation results. Shut down instance. | [ ] |
-
-| **Part 3 | 
-Run full benchmark suite across trials.  
-Test edge cases:  
-• Declined card  
-• Invalid AP2 signature  
-• Missing balance check  
-Fix bugs. | [ ] |
-
-| **Part 3 - Jan 15, 11:30 AM–12:30 PM (1 hr)** | 
-**Record 3‑min demo video**:  
-• 1 min: abstract + architecture  
-• 1 min: Green Agent demo (STT + CV task creation)  
-• 1 min: LedgerFlow AP2 handshake simulation  
-Screen record Xcode simulator + backend logs. | [ ] |
-
-| **Part 3 - Jan 15, 12:30–1:00 PM (0.5 hr)** | 
-**Upload video to YouTube (unlisted)**.  
-Add link to README + submission form. | [ ] |
-
-| **Part 3 Jan 15, 2:00–4:00 PM (2 hrs)** | 
-Fill hackathon form:  
-• Abstract  
-• GitHub link  
-• Video URL  
-Double-check requirements. Shut down instance. | [ ] |
-
-| **Jan 15, 4:00–11:59 PM** | Buffer for last-minute fixes + final submission. | [ ] |
+| Time Slot                                           | Task Description                                                                                                                                                                                                                                                                                                                                                                      | Check-off |
+|-----------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------|
+| Day 1 (1.5 hrs)                                    | Refactor architecture to match updated project tree. Define the two core interaction modalities: STT → Task creation; Image capture (VisionKit/CoreML) → Task creation. Update Mermaid diagrams to reflect A2A protocol + state matching. Set up local FastAPI backend with in-memory/file telemetry store. Test endpoints with curl/Postman.                                          | [x]       |
+| Part 1                                             | Implement STT → Task creation pipeline in Swift. Implement VisionKit/CoreML → Task creation pipeline. Add OpenAI + Apple Foundation Models hooks for intent extraction. Test both flows locally (no backend yet).                                                                                                                                                                      | [ ]       |
+| Part 1                                             | Deploy FastAPI backend to Lambda.ai. SSH, install deps, run server. Connect Swift → backend (AgentStateSyncService.swift). Test end-to-end: speech/image → task JSON → backend → local state file.                                                                                                                                                                                     | [ ]       |
+| Part 1                                             | Implement A2A protocol v1: Assessor simulates user/merchant; Multi-round reasoning (executor.py); Prompts for daily task scenarios. Add `/evaluate` endpoint for state matching. Run sample benchmarks (tasks.json).                                                                                                                                                                   | [ ]       |
+| Part 1                                             | Update README + `benchmark_design.md` with: A2A protocol; State matching; Action assertions; STT + CV multimodal flows. Commit/push.                                                                                                                                                                                                                                                  | [ ]       |
+| Part 1                                             | Breakfast + review. Spin up Lambda.ai instance.                                                                                                                                                                                                                                                                                                                                       | [ ]       |
+| Optional – Finance Agent                           | Build LedgerFlow (iOS finance agent). Integrate Ampersend SDK (mock AP2 handshake). Implement: Check Balance; Signature Request; Pending Transaction. Test simulated purchase flow (no real Apple Pay).                                                                                                                                                                              | [ ]       |
+| Part 2                                             | Implement rubrics: `state_matching.py` (visionOS DB vs goal state); `action_assertions.py` (tool-use correctness). Run multi-trial benchmarks for Green Agent + LedgerFlow.                                                                                                                                                                                                           | [ ]       |
+| Part 2                                             | Spatial enhancements: `ImmersiveControlSpace.swift`; Gesture/gaze stubs. Test on Vision Pro simulator/device. If Vision Pro fails → fallback to Meta Quest (WebXR + WebKit logging).                                                                                                                                                                                                  | [ ]       |
+| Part 2                                             | Finalize architecture diagrams + `system.mmd`. Update README with: A2A protocol; AP2 handshake simulation; Multimodal task creation; Evaluation rubric.                                                                                                                                                                                                                               | [ ]       |
+| Part 2                                             | End-to-end testing: Green Agent (task creation via STT + CV); LedgerFlow (AP2/Ampersend mock purchase). Collect telemetry + evaluation results. Shut down instance.                                                                                                                                                                                                                   | [ ]       |
+| Part 3                                             | Run full benchmark suite across trials. Test edge cases: Declined card; Invalid AP2 signature; Missing balance check. Fix bugs.                                                                                                                                                                                                                                                       | [ ]       |
+| Part 3 – Jan 15, 11:30 AM–12:30 PM (1 hr)          | Record 3‑min demo video: 1 min abstract + architecture; 1 min Green Agent demo (STT + CV task creation); 1 min LedgerFlow AP2 handshake simulation. Screen record Xcode simulator + backend logs.                                                                                                                                                                                    | [ ]       |
+| Part 3 – Jan 15, 12:30–1:00 PM (0.5 hr)            | Upload video to YouTube (unlisted). Add link to README + submission form.                                                                                                                                                                                                                                                                                                             | [ ]       |
+| Part 3 – Jan 15, 2:00–4:00 PM (2 hrs)              | Fill hackathon form: Abstract; GitHub link; Video URL. Double-check requirements. Shut down instance.                                                                                                                                                                                                                                                                                 | [ ]       |
+| Jan 15, 4:00–11:59 PM                              | Buffer for last-minute fixes + final submission.                                                                                                                                                                                                                                                                                                                                      | [ ]       |
