@@ -1,5 +1,5 @@
 //
-//  cyra_agentbeatsApp.swift
+//  SpatialAgentApp.swift
 //  cyra-agentbeats
 //
 //  Created by Erin Jerri on 1/12/26.
@@ -8,7 +8,7 @@ import SwiftUI
 import SwiftData
 
 @main
-struct cyra_agentbeatsApp: App {
+struct SpatialAgentApp: App {
     var body: some Scene {
         WindowGroup {
             MainDashboardView()
