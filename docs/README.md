@@ -1,99 +1,287 @@
-# CYRA-AgentBeatsHackathon
-Create Your Reality Agent - App - v1 prototype for AgentBeats Hackathon - 2025-2026 - Green Agent
-
-# Abstract
-Create Your Reality Agent (CYRA): Spatial Computing / AR–VR Agent Benchmark
-
+# CYRA AgentBeats Hackathon
+## Abstract 
 Create Your Reality Agent (CYRA) is a spatial-computing-native Green Agent benchmark built to evaluate embodied agent behavior in immersive AR/VR environments, following the design principles outlined in Establishing Best Practices for Building Rigorous Agentic Benchmarks (Zhu et al., 2025) and the AgentBeats Agentified Agent Assessment (AAA) framework.
 
 Existing agent benchmarks such as OSWorld, WebArena, and τ-bench primarily evaluate agents through browser-based or API-centric tasks. CYRA extends this evaluation paradigm into spatial computing, measuring how agents perceive, reason, and act within 3D, multimodal interfaces while introducing spatial task competency as a first-class evaluation dimension.
 
-CYRA is implemented initially on Apple Vision Pro (visionOS), combining:
-	•	Swift-based spatial UI for immersive/Windowed spaces
-	•	WebKit-constrained task scaffolds
-	•	Speech-driven function calling for voice intent
-	•	CoreML/VisionKit for visual context capture
-	•	SwiftData/CoreData as the local persistent state layer
-	•	Swift AppIntents as a native tool interface
-	•	FastAPI as a backend bridge to coordinate state, telemetry, and A2A-compliant interactions with the AgentBeats platform
+CYRA is implemented initially on Apple Vision Pro (visionOS), combining: • Swift-based spatial UI for immersive/Windowed spaces • WebKit-constrained task scaffolds • Speech-driven function calling for voice intent • CoreML/VisionKit for visual context capture • SwiftData/CoreData as the local persistent state layer • Swift AppIntents as a native tool interface • FastAPI as a backend bridge to coordinate state, telemetry, and A2A-compliant interactions with the AgentBeats platform
 
 Structured task representations, agent actions, and full-trace telemetry are persisted via lambda.ai cloud storage, enabling reproducible replay, deterministic scoring, and post-hoc analysis. The system is designed with cross-platform abstractions, with Meta Quest devices supported in the second phase of the hackathon to enable Purple Agent evaluations beyond Vision Pro.
 
-The hackathon proceeds in two phases:
-	•	Phase 1 — Green Agent: CYRA evaluates productivity-focused workflows, such as task creation, task completion, document summarization, and spatial organization. The Green Agent acts as the environment manager, proctor, and evaluator, ensuring deterministic execution and reproducible scoring.
-	•	Phase 2 — Purple Agent: A competing agent interacts with the Green Agent to execute finance-oriented or transactional workflows, including AP2-inspired simulated app purchases and structured reasoning tasks. This phase emphasizes cross-platform compatibility and A2A protocol interoperability.
+The hackathon proceeds in two phases: • Phase 1 — Green Agent: CYRA evaluates productivity-focused workflows, such as task creation, task completion, document summarization, and spatial organization. The Green Agent acts as the environment manager, proctor, and evaluator, ensuring deterministic execution and reproducible scoring. • Phase 2 — Purple Agent: A competing agent interacts with the Green Agent to execute finance-oriented or transactional workflows, including AP2-inspired simulated app purchases and structured reasoning tasks. This phase emphasizes cross-platform compatibility and A2A protocol interoperability.
 
-Each benchmark run captures complete telemetry across:
-	•	Speech input
-	•	Vision/intent parsing
-	•	Function-call sequences
-	•	Spatial interactions
-	•	Local and cloud state transitions
+Each benchmark run captures complete telemetry across: • Speech input • Vision/intent parsing • Function-call sequences • Spatial interactions • Local and cloud state transitions
 
 Evaluation is performed using state-matching rubrics comparing persisted app state, ledger entries, and task outcomes against explicit goal states. Metrics include task success rate, spatial accuracy, function-call correctness, latency, error recovery, and robustness across repeated trials.
 
 CYRA, together with its complementary Purple Assessor Agent, forms a reusable, extensible benchmark template for evaluating agentic performance in embodied, multimodal, and cross-platform AR/VR environments. Developed under a rapid hackathon timeline, the project emphasizes transparency, modularity, and clearly documented limitations, while providing a foundation for future benchmarks in spatial computing and immersive AI systems.
 
+## tl;dr - Description
 
-# Overview CYRA Tree - Project Directory Structure
+CYRA is a visionOS-native agent evaluation framework designed for the AgentBeats Hackathon. The system pairs a deterministic "green agent" referee with a purpose-built "purple agent" challenger to stress-test the AgentBeats judging rubric through verifiable multi-modal evaluations.  
 
-```text
+**Key Features:**  
+- Vision-native sensing: visionOS client streams speech, vision, and SwiftData context into the FastAPI referee for synchronized multi-modal processing.  
+- FastAPI referee core: Backend endpoints orchestrate task dispatch, evaluation triggers, and JSON state persistence to keep traces auditable.  
+- Deterministic scoring: Green agent assessor enforces state matching plus action assertions to meet verifiable evaluation criteria.  
+- Purple agent stress test: Purpose-built purple agent probes A2A/MCP integrations while the green referee logs every scoring decision.  
+- Traceable judging trail: Trace logging bridges both agents so judges can replay tool calls, scores, and mismatches directly on AgentBeats.  
+
+## System Architecture
+
+### Green Agent (Referee)
+
+The green agent serves as the deterministic evaluation spine, validating visionOS streams, enforcing task rules, and logging traceable scores.
+
+```mermaid
+flowchart TB
+    subgraph Client["visionOS Client"]
+        STT["Speech-to-Text"]
+        VK["VisionKit / CoreML"]
+        UI["visionOS UI"]
+        SD["SwiftData State"]
+    end
+
+    subgraph Backend["FastAPI Backend"]
+        API["/process + /tasks"]
+        Eval["/evaluate (Green)"]
+        Store["Local JSON Storage"]
+    end
+
+    subgraph EvalLayer["Green Agent Assessor"]
+        Assessor["State Matching + Action Assertions"]
+    end
+
+    STT --> UI
+    VK --> UI
+    UI --> SD
+    SD --> API
+    API --> Store
+    Store --> Assessor
+    Assessor --> Eval
+```
+
+**Green Agent Responsibilities:**
+- **Sensing tier**: Speech-to-text, VisionKit/CoreML, and SwiftData surfaces feed a cohesive visionOS UI that captures operator intent and environment context
+- **Control tier**: FastAPI routes /process and /tasks endpoints synchronize state, trigger evaluations, and persist JSON artifacts for auditability
+- **Scoring tier**: State-matching plus action assertions convert observations into pass/fail decisions with explainable logs
+
+**Flow:**
+1. Capture multi-modal cues on visionOS and persist via SwiftData
+2. Forward context to FastAPI for task orchestration and storage
+3. Route triggers through the green assessor to verify state and actions
+4. Emit evaluation verdicts back to the client and judging platform
+
+### Purple Agent (Assessee)
+
+The purple agent simulates the challenger agent that the green referee evaluates, exercising A2A/MCP integrations and providing stress-test scenarios.
+
+```mermaid
+flowchart TB
+    subgraph PurpleAgent["Purple Agent (Assessee)"]
+        Reason["Reasoning Loop"]
+        Tools["Tool Calls (A2A/MCP)"]
+        Memory["Short-Term Memory"]
+    end
+
+    subgraph Assessor["Assessor Agent (Green Winner)"]
+        Kickoff["Kickoff Script"]
+        Score["Scoring Logic"]
+        Trace["Trace Logging"]
+    end
+
+    subgraph Platform["AgentBeats Platform"]
+        A2A["A2A Server"]
+        MCP["MCP Tool Layer"]
+        Registry["Agent Registry"]
+    end
+
+    Kickoff --> PurpleAgent
+    PurpleAgent --> Tools
+    Tools --> MCP
+    PurpleAgent --> Assessor
+    Assessor --> Score
+    Score --> Trace
+    PurpleAgent --> Registry
+```
+
+**Purple Agent Responsibilities:**
+- **Reasoning core**: Reasoning loop formulates plans, selects tools, and updates short-term memory to mimic real agent behavior
+- **Tooling**: A2A/MCP tool calls stress-test platform integrations while feeding the judge with execution traces
+- **Registry & scoring**: Agent registry registration and trace logging enable the green winner to score every interaction
+
+**Flow:**
+1. Kickoff script seeds the purple agent with evaluation objectives
+2. Reasoning loop iterates, invoking tools through A2A/MCP layers
+3. Interactions stream to the assessor for scoring and trace capture
+4. Registry entry plus trace log closes the loop for judges
+
+## Project Structure
+
+```
 CYRA-AgentBeatsHackathon/
-├── visionOS_App/                         # Spatial Environment (Swift / visionOS)
-│   ├── SpatialAgentApp.swift             # Entry point; initializes DataHandler & ImmersiveSpace
-│   ├── ImmersiveControlSpace.swift       # 3D environment for agentic "Computer Use" visualization
-│   ├── Models/                           # SwiftData / Persistence Layer
-│   │   ├── TaskModel.swift               # Primary schema for Daily Tasks (ID, Title, Priority, Status)
-│   │   └── TransactionModel.swift        # ROADMAP: Schema for Financial Records (Amount, AP2 Status)
-│   ├── DataBridge/                       # Networking & A2A Synchronization
-│   │   ├── AgentStateSyncService.swift   # Bi-directional bridge to sync SwiftData with FastAPI
-│   │   └── AP2PaymentHandler.swift       # ROADMAP: Manages AP2/Ampersend transaction signing
-│   └── Views/                            # Immersive UI Components
-│       ├── MainDashboardView.swift       # Central 2D window for calendar/to-do monitoring
-│       ├── TaskDetailView.swift          # View for inspecting specific agent-created tasks
-│       └── FinanceOverlayView.swift      # ROADMAP: Secure spatial window for payment confirmation
-├── backend/                              # Data Handler & A2A Server (FastAPI)
-│   ├── main.py                           # Entry point; wraps app with AgentBeats Controller
-│   ├── api/                              # REST/WebSocket endpoints for visionOS state sync
-│   └── services/                         # Pydantic-based business logic for "World State"
-├── agent_bench/                          # Evaluation Engine (AgentBeats)
-│   ├── primary_assessor/                 # GREEN AGENT: The Task Creator Evaluator
-│   │   ├── executor.py                   # Multi-round reasoning and user simulation logic
-│   │   └── prompts.py                    # System prompts for "Daily Task" agentic scenarios
-│   ├── secondary_assessor/               # ROADMAP: The Finance Evaluator (AP2/Ampersend)
-│   ├── rubrics/                          # Programmatic Success Metrics
-│   │   ├── state_matching.py             # Compares visionOS DB to annotated goal states
-│   │   └── action_assertions.py          # Verifies tool-use correctness via MCP
-│   └── data_gen/                         # Synthetic scenario generation for tasks
-├── tools/                                # Tool Layer
-│   └── mcp_server.py                     # MCP server for dynamic discovery of app functions
-├── config/                               # Metadata
-│   ├── agent_card.toml                   # Required for AgentBeats Registry discovery
-│   └── ap2_settings.yaml                 # ROADMAP: Credentials for Ampersend SDK
-├── requirements.txt                      # Python dependencies (earthshaker, fastapi, google-adk)
-├── run.sh                                # CLI: pip install earthshaker && python main.py run
-├── Procfile                              # DEPLOYMENT: web: agentbeats run_ctrl
-└── README.md                             # Documentation on Tech Stack & agentic reasoning
+├── README.md
+├── docs/
+│   ├── architecture.md
+│   ├── evaluation-rubric.md
+│   └── api-reference.md
+├── client/
+│   ├── visionOS/
+│   │   ├── ContentView.swift
+│   │   ├── SpeechManager.swift
+│   │   ├── VisionManager.swift
+│   │   └── SwiftDataModels.swift
+│   └── shared/
+│       ├── Models.swift
+│       └── Networking.swift
+├── backend/
+│   ├── app/
+│   │   ├── main.py
+│   │   ├── api/
+│   │   │   ├── __init__.py
+│   │   │   ├── process.py
+│   │   │   ├── tasks.py
+│   │   │   └── evaluate.py
+│   │   ├── core/
+│   │   │   ├── __init__.py
+│   │   │   ├── assessor.py
+│   │   │   ├── scoring.py
+│   │   │   └── storage.py
+│   │   └── models/
+│   │       ├── __init__.py
+│   │       ├── task.py
+│   │       ├── evaluation.py
+│   │       └── trace.py
+│   ├── requirements.txt
+│   └── Dockerfile
+├── agents/
+│   ├── green/
+│   │   ├── __init__.py
+│   │   ├── referee.py
+│   │   ├── validators/
+│   │   │   ├── __init__.py
+│   │   │   ├── state_matcher.py
+│   │   │   └── action_assertions.py
+│   │   └── scoring/
+│   │       ├── __init__.py
+│   │       └── deterministic_scorer.py
+│   └── purple/
+│       ├── __init__.py
+│       ├── challenger.py
+│       ├── reasoning/
+│       │   ├── __init__.py
+│       │   ├── planner.py
+│       │   └── memory.py
+│       └── tools/
+│           ├── __init__.py
+│           ├── a2a_client.py
+│           └── mcp_tools.py
+├── evaluation/
+│   ├── datasets/
+│   │   ├── visionos_scenarios.json
+│   │   └── task_definitions.json
+│   ├── scripts/
+│   │   ├── run_evaluation.py
+│   │   └── generate_report.py
+│   └── results/
+│       └── .gitkeep
+├── tests/
+│   ├── unit/
+│   │   ├── test_assessor.py
+│   │   ├── test_scoring.py
+│   │   └── test_agents.py
+│   ├── integration/
+│   │   ├── test_api.py
+│   │   └── test_e2e.py
+│   └── fixtures/
+│       ├── sample_tasks.json
+│       └── mock_traces.json
+└── scripts/
+    ├── setup.sh
+    ├── run_locally.sh
+    └── deploy.sh
+```
 
-# AgentBeats Hackathon — To‑Do Timeline (Green Agent + LedgerFlow)
+## Installation
 
-Repo: https://github.com/erinjerri/CYRA-AgentBeatsHackathon
+```bash
+# Clone the repository
+git clone https://github.com/erinjerri/CYRA-AgentBeatsHackathon.git
+cd CYRA-AgentBeatsHackathon
 
-| Time Slot                                           | Task Description                                                                                                                                                                                                                                                                                                                                                                      | Check-off |
-|-----------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------|
-| Part 1                                    | Refactor architecture to match updated project tree. Define the two core interaction modalities: STT → Task creation; Image capture (VisionKit/CoreML) → Task creation. Update Mermaid diagrams to reflect A2A protocol + state matching. Set up local FastAPI backend with in-memory/file telemetry store. Test endpoints with curl/Postman.                                          | [x]       |
-| Part 1                                             | Implement STT → Task creation pipeline in Swift. Implement VisionKit/CoreML → Task creation pipeline. Add OpenAI + Apple Foundation Models hooks for intent extraction. Test both flows locally (no backend yet).                                                                                                                                                                      | [ ]       |
-| Part 1                                             | Deploy FastAPI backend to Lambda.ai. SSH, install deps, run server. Connect Swift → backend (AgentStateSyncService.swift). Test end-to-end: speech/image → task JSON → backend → local state file.                                                                                                                                                                                     | [ ]       |
-| Part 1                                             | Implement A2A protocol v1: Assessor simulates user/merchant; Multi-round reasoning (executor.py); Prompts for daily task scenarios. Add `/evaluate` endpoint for state matching. Run sample benchmarks (tasks.json).                                                                                                                                                                   | [ ]       |
-| Part 1                                             | Update README + `benchmark_design.md` with: A2A protocol; State matching; Action assertions; STT + CV multimodal flows. Commit/push.                                                                                                                                                                                                                                                  | [ ]       |
-| Part 1                                             | Breakfast + review. Spin up Lambda.ai instance.                                                                                                                                                                                                                                                                                                                                       | [ ]       |
-| Optional – Finance Agent                           | Build LedgerFlow (iOS finance agent). Integrate Ampersend SDK (mock AP2 handshake). Implement: Check Balance; Signature Request; Pending Transaction. Test simulated purchase flow (no real Apple Pay).                                                                                                                                                                              | [ ]       |
-| Part 2                                             | Implement rubrics: `state_matching.py` (visionOS DB vs goal state); `action_assertions.py` (tool-use correctness). Run multi-trial benchmarks for Green Agent + LedgerFlow.                                                                                                                                                                                                           | [ ]       |
-| Part 2                                             | Spatial enhancements: `ImmersiveControlSpace.swift`; Gesture/gaze stubs. Test on Vision Pro simulator/device. If Vision Pro fails → fallback to Meta Quest (WebXR + WebKit logging).                                                                                                                                                                                                  | [ ]       |
-| Part 2                                             | Finalize architecture diagrams + `system.mmd`. Update README with: A2A protocol; AP2 handshake simulation; Multimodal task creation; Evaluation rubric.                                                                                                                                                                                                                               | [ ]       |
-| Part 2                                             | End-to-end testing: Green Agent (task creation via STT + CV); LedgerFlow (AP2/Ampersend mock purchase). Collect telemetry + evaluation results. Shut down instance.                                                                                                                                                                                                                   | [ ]       |
-| Part 3                                             | Run full benchmark suite across trials. Test edge cases: Declined card; Invalid AP2 signature; Missing balance check. Fix bugs.                                                                                                                                                                                                                                                       | [ ]       |
-| Part 3 – Jan 15, 11:30 AM–12:30 PM (1 hr)          | Record 3‑min demo video: 1 min abstract + architecture; 1 min Green Agent demo (STT + CV task creation); 1 min LedgerFlow AP2 handshake simulation. Screen record Xcode simulator + backend logs.                                                                                                                                                                                    | [ ]       |
-| Part 3 – Jan 15, 12:30–1:00 PM (0.5 hr)            | Upload video to YouTube (unlisted). Add link to README + submission form.                                                                                                                                                                                                                                                                                                             | [ ]       |
-| Part 3 – Jan 15, 2:00–4:00 PM (2 hrs)              | Fill hackathon form: Abstract; GitHub link; Video URL. Double-check requirements. Shut down instance.                                                                                                                                                                                                                                                                                 | [ ]       |
-| Jan 15, 4:00–11:59 PM                              | Buffer for last-minute fixes + final submission.                                                                                                                                                                                                                                                                                                                                      | [ ]       |
+# Setup backend
+cd backend
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+pip install -r requirements.txt
+
+# Setup visionOS client (requires Xcode 15+ and visionOS simulator)
+cd ../client/visionOS
+open CYRA.xcodeproj
+```
+
+## Usage
+
+### Running the Backend
+```bash
+cd backend
+uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+```
+
+### Running the visionOS Client
+1. Open `CYRA.xcodeproj` in Xcode
+2. Select the visionOS simulator as target
+3. Build and run (Cmd+R)
+
+### Running Evaluations
+```bash
+cd evaluation
+python scripts/run_evaluation.py --dataset visionos_scenarios.json
+```
+
+## Evaluation Rubric
+
+The CYRA framework evaluates agents across these dimensions:
+
+1. **State Matching Accuracy** - How well the agent state aligns with expected checkpoints
+2. **Action Compliance** - Validity and safety of tool usage and timing
+3. **Trace Completeness** - Quality and completeness of execution logs
+4. **Multi-modal Integration** - Effective use of speech, vision, and context data
+5. **Deterministic Scoring** - Consistency and verifiability of evaluation outcomes
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Acknowledgments
+
+- AgentBeats Hackathon organizers for the evaluation framework
+- Apple visionOS team for the platform and tools
+- OpenAI for the agent evaluation insights
+
+## Citation
+
+If you use CYRA in your research, please cite:
+
+```bibtex
+@software{cyra_agentbeats_2025,
+  title={CYRA: Vision-Native Agent Evaluation Framework for AgentBeats},
+  author={Erin Jerri},
+  year={2025},
+  url={https://github.com/erinjerri/CYRA-AgentBeatsHackathon}
+}
+```
+
+---
+
+> [!NOTE]  
+> This README follows GitHub's best-practice recommendations for structure, clarity, and completeness. <CitationPill url="https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-readmes" />
+>
