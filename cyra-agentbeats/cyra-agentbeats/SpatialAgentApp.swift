@@ -7,7 +7,6 @@
 import SwiftUI
 import SwiftData
 
-@main
 struct SpatialAgentApp: App {
     var body: some Scene {
         WindowGroup {
