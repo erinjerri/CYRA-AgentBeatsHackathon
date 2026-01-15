@@ -35,49 +35,45 @@ Evaluation is performed using state-matching rubrics comparing persisted app sta
 CYRA, together with its complementary Purple Assessor Agent, forms a reusable, extensible benchmark template for evaluating agentic performance in embodied, multimodal, and cross-platform AR/VR environments. Developed under a rapid hackathon timeline, the project emphasizes transparency, modularity, and clearly documented limitations, while providing a foundation for future benchmarks in spatial computing and immersive AI systems.
 
 
-# Overview CYRA Tree
+# Overview CYRA Tree - Project Directory Structure
 
-CYRA Tree
-├── visionOS_App/ # --- [SPATIAL ENVIRONMENT (SWIFT)] ---
-│ ├── SpatialAgentApp.swift # Entry point; initializes DataHandler & ImmersiveSpace [7]
-│ ├── ImmersiveControlSpace.swift # 3D environment for agentic "Computer Use" visualization [8]
-│ ├── Models/ # --- SwiftData / Persistence Layer ---
-│ │ ├── TaskModel.swift # PRIMARY: Schema for Daily Tasks (ID, Title, Priority, Status) [6]
-│ │ └── TransactionModel.swift # ROADMAP: Schema for Financial Records (Amount, AP2 Status) [9]
-│ ├── DataBridge/ # --- Networking & A2A Synchronization ---
-│ │ ├── AgentStateSyncService.swift # Bi-directional bridge to sync SwiftData with FastAPI [2, 3]
-│ │ └── AP2PaymentHandler.swift # ROADMAP: Manages AP2/Ampersend transaction signing
-│ └── Views/ # --- Immersive UI Components ---
-│ ├── MainDashboardView.swift # Central 2D window for calendar/to-do monitoring
-│ ├── TaskDetailView.swift # View for inspecting specific agent-created tasks
-│ └── FinanceOverlayView.swift # ROADMAP: Secure spatial window for payment confirmation
-
-├── backend/ # --- [DATA HANDLER & A2A SERVER (FASTAPI)] ---
-│ ├── main.py # Entry point; wraps app with AgentBeats Controller [7, 10]
-│ ├── api/ # REST/WebSocket endpoints for visionOS state sync
-│ └── services/ # Pydantic-based business logic for "World State"
-
-├── agent_bench/ # --- [EVALUATION ENGINE (AGENTBEATS)] ---
-│ ├── primary_assessor/ # GREEN AGENT: The Task Creator Evaluator [11, 12]
-│ │ ├── executor.py # Multi-round reasoning and user simulation logic [13, 14]
-│ │ └── prompts.py # System prompts for "Daily Task" agentic scenarios [13, 15]
-│ ├── secondary_assessor/ # ROADMAP: The Finance Evaluator (AP2/Ampersend)
-│ ├── rubrics/ # --- Programmatic Success Metrics ---
-│ │ ├── state_matching.py # Compares visionOS DB to annotated goal states [4, 5]
-│ │ └── action_assertions.py # Verifies tool-use correctness via MCP [16]
-│ └── data_gen/ # Synthetic scenario generation for tasks [5, 16]
-
-├── tools/ # --- [TOOL LAYER] ---
-│ └── mcp_server.py # MCP server for dynamic discovery of app functions [13, 17]
-
-├── config/ # --- [METADATA] ---
-│ ├── agent_card.toml # Required for AgentBeats Registry discovery [2, 18]
-│ └── ap2_settings.yaml # ROADMAP: Credentials for Ampersend SDK
-
-├── requirements.txt # Python dependencies (earthshaker, fastapi, google-adk) [10]
-├── run.sh # CLI: pip install earthshaker && python main.py run [10]
-├── Procfile # DEPLOYMENT: web: agentbeats run_ctrl [19]
-└── README.md # Documentation on Tech Stack & agentic reasoning
+```text
+CYRA-AgentBeatsHackathon/
+├── visionOS_App/                         # Spatial Environment (Swift / visionOS)
+│   ├── SpatialAgentApp.swift             # Entry point; initializes DataHandler & ImmersiveSpace
+│   ├── ImmersiveControlSpace.swift       # 3D environment for agentic "Computer Use" visualization
+│   ├── Models/                           # SwiftData / Persistence Layer
+│   │   ├── TaskModel.swift               # Primary schema for Daily Tasks (ID, Title, Priority, Status)
+│   │   └── TransactionModel.swift        # ROADMAP: Schema for Financial Records (Amount, AP2 Status)
+│   ├── DataBridge/                       # Networking & A2A Synchronization
+│   │   ├── AgentStateSyncService.swift   # Bi-directional bridge to sync SwiftData with FastAPI
+│   │   └── AP2PaymentHandler.swift       # ROADMAP: Manages AP2/Ampersend transaction signing
+│   └── Views/                            # Immersive UI Components
+│       ├── MainDashboardView.swift       # Central 2D window for calendar/to-do monitoring
+│       ├── TaskDetailView.swift          # View for inspecting specific agent-created tasks
+│       └── FinanceOverlayView.swift      # ROADMAP: Secure spatial window for payment confirmation
+├── backend/                              # Data Handler & A2A Server (FastAPI)
+│   ├── main.py                           # Entry point; wraps app with AgentBeats Controller
+│   ├── api/                              # REST/WebSocket endpoints for visionOS state sync
+│   └── services/                         # Pydantic-based business logic for "World State"
+├── agent_bench/                          # Evaluation Engine (AgentBeats)
+│   ├── primary_assessor/                 # GREEN AGENT: The Task Creator Evaluator
+│   │   ├── executor.py                   # Multi-round reasoning and user simulation logic
+│   │   └── prompts.py                    # System prompts for "Daily Task" agentic scenarios
+│   ├── secondary_assessor/               # ROADMAP: The Finance Evaluator (AP2/Ampersend)
+│   ├── rubrics/                          # Programmatic Success Metrics
+│   │   ├── state_matching.py             # Compares visionOS DB to annotated goal states
+│   │   └── action_assertions.py          # Verifies tool-use correctness via MCP
+│   └── data_gen/                         # Synthetic scenario generation for tasks
+├── tools/                                # Tool Layer
+│   └── mcp_server.py                     # MCP server for dynamic discovery of app functions
+├── config/                               # Metadata
+│   ├── agent_card.toml                   # Required for AgentBeats Registry discovery
+│   └── ap2_settings.yaml                 # ROADMAP: Credentials for Ampersend SDK
+├── requirements.txt                      # Python dependencies (earthshaker, fastapi, google-adk)
+├── run.sh                                # CLI: pip install earthshaker && python main.py run
+├── Procfile                              # DEPLOYMENT: web: agentbeats run_ctrl
+└── README.md                             # Documentation on Tech Stack & agentic reasoning
 
 # AgentBeats Hackathon — To‑Do Timeline (Green Agent + LedgerFlow)
 
