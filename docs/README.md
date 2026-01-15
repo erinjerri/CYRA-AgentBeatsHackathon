@@ -263,9 +263,10 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Acknowledgments
 
-- AgentBeats Hackathon organizers for the evaluation framework
-- Apple visionOS team for the platform and tools
-- OpenAI for the agent evaluation insights
+- AgentBeats Hackathon organizers for the evaluation framework.
+- Apple visionOS team for the platform and tools.
+- OpenAI for the agent evaluation insights.
+- Lambda.ai for the sponsored cloud storage
 
 ## Citation
 
