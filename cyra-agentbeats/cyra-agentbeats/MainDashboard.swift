@@ -3,43 +3,44 @@
 //  cyra-agentbeats
 //
 //  Created by Erin Jerri on 1/12/26.
-//
 import SwiftUI
-import SwiftData
 
 struct MainDashboardView: View {
-    @State private var tasks: [BackendTask] = []
-    @State private var newTaskDescription = ""
-    let service = TaskService()
+    @State private var newTaskDescription: String = ""
+    @State private var tasks: [TaskModel] = []
+    let service = AgentStateSyncService()
 
     var body: some View {
-        VStack {
-            Text("Tasks")
-                .font(.largeTitle)
-
-            List(tasks) { task in
-                VStack(alignment: .leading) {
-                    Text(task.description)
-                    Text(task.status)
-                        .font(.caption)
-                        .foregroundColor(.gray)
-                }
-            }
-
+        VStack(alignment: .leading) {
             HStack {
                 TextField("New task...", text: $newTaskDescription)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .frame(minWidth: 200)
+
                 Button("Create") {
                     Task {
-                        try await service.createTask(description: newTaskDescription)
-                        newTaskDescription = ""
-                        tasks = try await service.fetchTasks()
+                        do {
+                            try await service.createTask(description: newTaskDescription)
+                            newTaskDescription = ""
+                            tasks = try await service.fetchTasks()
+                        } catch {
+                            print("Task creation failed: \(error)")
+                        }
                     }
                 }
             }
             .padding()
+
+            List(tasks, id: \.id) { task in
+                Text(task.description)
+            }
         }
         .task {
-            tasks = try! await service.fetchTasks()
+            do {
+                tasks = try await service.fetchTasks()
+            } catch {
+                print("Initial fetch failed: \(error)")
+            }
         }
     }
 }

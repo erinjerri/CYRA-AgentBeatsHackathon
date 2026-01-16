@@ -12,6 +12,5 @@ struct SpatialAgentApp: App {
         WindowGroup {
             MainDashboardView()
         }
-        .modelContainer(for: TaskModel.self)
     }
 }

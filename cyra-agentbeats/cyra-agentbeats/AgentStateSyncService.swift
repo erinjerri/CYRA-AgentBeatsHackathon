@@ -3,29 +3,38 @@
 //  cyra-agentbeats
 //
 //  Created by Erin Jerri on 1/12/26.
-//
 import Foundation
 
+struct CreateTaskRequest: Codable {
+    let description: String
+}
+
 class AgentStateSyncService {
-    static let shared = AgentStateSyncService()
-    private let baseURL = URL(string: "http://127.0.0.1:8000")!
+    private let baseURL = URL(string: "http://localhost:8000")!
 
-    func pushTask(id: String, title: String) async {
-        let payload: [String: Any] = [
-            "user_utterance": title
-        ]
+    // MARK: - Fetch tasks
+    func fetchTasks() async throws -> [TaskModel] {
+        let url = baseURL.appendingPathComponent("tasks")
+        let (data, _) = try await URLSession.shared.data(from: url)
+        return try JSONDecoder().decode([TaskModel].self, from: data)
+    }
 
-        guard let body = try? JSONSerialization.data(withJSONObject: payload) else { return }
+    // MARK: - Create task
+    func createTask(description: String) async throws {
+        let url = baseURL.appendingPathComponent("tasks")
 
-        var request = URLRequest(url: baseURL.appendingPathComponent("/process"))
+        var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.httpBody = body
 
-        do {
-            let (_, _) = try await URLSession.shared.data(for: request)
-        } catch {
-            print("Error pushing task:", error)
+        let body = CreateTaskRequest(description: description)
+        request.httpBody = try JSONEncoder().encode(body)
+
+        let (_, response) = try await URLSession.shared.data(for: request)
+
+        guard let http = response as? HTTPURLResponse,
+              (200..<300).contains(http.statusCode) else {
+            throw URLError(.badServerResponse)
         }
     }
 }

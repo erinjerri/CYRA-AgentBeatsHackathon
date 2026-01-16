@@ -3,9 +3,7 @@
 //  cyra-agentbeats
 //
 //  Created by Erin Jerri on 1/12/26.
-//
 import SwiftUI
-import SwiftData
 
 @main
 struct cyra_agentbeatsApp: App {
@@ -13,6 +11,5 @@ struct cyra_agentbeatsApp: App {
         WindowGroup {
             MainDashboardView()
         }
-        .modelContainer(for: TaskModel.self)
     }
 }
