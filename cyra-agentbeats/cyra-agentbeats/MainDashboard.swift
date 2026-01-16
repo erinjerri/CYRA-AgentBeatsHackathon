@@ -6,25 +6,27 @@
 import SwiftUI
 
 struct MainDashboardView: View {
-    @State private var newTaskDescription: String = ""
+    @State private var newTaskTitle: String = ""
     @State private var tasks: [TaskModel] = []
     let service = AgentStateSyncService()
 
     var body: some View {
         VStack(alignment: .leading) {
             HStack {
-                TextField("New task...", text: $newTaskDescription)
+                TextField("New task title...", text: $newTaskTitle)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .frame(minWidth: 200)
 
                 Button("Create") {
+                    print("BUTTON PRESSED")   // ← DEBUG PRINT
+
                     Task {
                         do {
-                            try await service.createTask(description: newTaskDescription)
-                            newTaskDescription = ""
+                            try await service.createTask(title: newTaskTitle)
+                            newTaskTitle = ""
                             tasks = try await service.fetchTasks()
                         } catch {
-                            print("Task creation failed: \(error)")
+                            print("Task creation failed:", error)
                         }
                     }
                 }
@@ -32,14 +34,20 @@ struct MainDashboardView: View {
             .padding()
 
             List(tasks, id: \.id) { task in
-                Text(task.description)
+                VStack(alignment: .leading) {
+                    Text(task.title)
+                        .font(.headline)
+                    Text("Status: \(task.status)")
+                        .font(.caption)
+                        .foregroundColor(.gray)
+                }
             }
         }
         .task {
             do {
                 tasks = try await service.fetchTasks()
             } catch {
-                print("Initial fetch failed: \(error)")
+                print("Initial fetch failed:", error)
             }
         }
     }

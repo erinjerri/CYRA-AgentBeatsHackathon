@@ -7,5 +7,7 @@ import Foundation
 
 struct TaskModel: Identifiable, Codable {
     let id: String
-    let description: String
+    let title: String
+    let priority: Int
+    let status: String
 }

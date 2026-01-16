@@ -6,28 +6,29 @@
 import Foundation
 
 struct CreateTaskRequest: Codable {
-    let description: String
+    let title: String
 }
 
 class AgentStateSyncService {
-    private let baseURL = URL(string: "http://localhost:8000")!
+    private let baseURL = URL(string: "http://192.222.59.162:8000")!
 
-    // MARK: - Fetch tasks
     func fetchTasks() async throws -> [TaskModel] {
         let url = baseURL.appendingPathComponent("tasks")
+        print("FETCHING FROM:", url.absoluteString)
+
         let (data, _) = try await URLSession.shared.data(from: url)
         return try JSONDecoder().decode([TaskModel].self, from: data)
     }
 
-    // MARK: - Create task
-    func createTask(description: String) async throws {
+    func createTask(title: String) async throws {
         let url = baseURL.appendingPathComponent("tasks")
+        print("CREATING TASK AT:", url.absoluteString)
 
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
-        let body = CreateTaskRequest(description: description)
+        let body = CreateTaskRequest(title: title)
         request.httpBody = try JSONEncoder().encode(body)
 
         let (_, response) = try await URLSession.shared.data(for: request)
