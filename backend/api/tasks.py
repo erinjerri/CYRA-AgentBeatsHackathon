@@ -1,13 +1,9 @@
-from fastapi import APIRouter, HTTPException
-from pydantic import BaseModel
-from typing import List, Optional
+from fastapi import APIRouter
+from backend.storage.storage import load_all_tasks  # Import your existing function
 
 router = APIRouter(prefix="/tasks", tags=["tasks"])
 
 @router.get("")
 def list_tasks():
-    """
-    Return all stored task JSON files from backend/storage/tasks/
-    """
-    tasks = storage.load_all_tasks()
+    tasks = load_all_tasks()
     return {"tasks": tasks}
