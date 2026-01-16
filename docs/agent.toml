@@ -1,0 +1,15 @@
+name = "CYRA Green Agent"
+version = "0.1.0"
+description = "A Green Agent that evaluates assessee agents on task creation, retrieval, and state-matching correctness."
+
+[agent]
+type = "green"
+entrypoint = "http://192.222.59.162:8000"
+
+[capabilities]
+modalities = ["text"]
+tools = ["create_task", "get_tasks"]
+
+[metadata]
+author = "Erin"
+repo = "https://github.com/erinjerri/CYRA-AgentBeatsHackathon"
