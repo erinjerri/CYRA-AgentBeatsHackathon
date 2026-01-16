@@ -8,26 +8,38 @@ import SwiftUI
 import SwiftData
 
 struct MainDashboardView: View {
-    @Environment(\.modelContext) private var context
+    @State private var tasks: [BackendTask] = []
+    @State private var newTaskDescription = ""
+    let service = TaskService()
 
     var body: some View {
-        VStack(spacing: 20) {
-            Text("Green Agent Demo")
+        VStack {
+            Text("Tasks")
                 .font(.largeTitle)
 
-            Button("Create Task") {
-                Task {
-                    let id = UUID().uuidString
-                    let title = "Buy groceries"
-
-                    await AgentStateSyncService.shared.pushTask(id: id, title: title)
-
-                    let newTask = TaskModel(id: id, title: title)
-                    context.insert(newTask)
+            List(tasks) { task in
+                VStack(alignment: .leading) {
+                    Text(task.description)
+                    Text(task.status)
+                        .font(.caption)
+                        .foregroundColor(.gray)
                 }
             }
-            .buttonStyle(.borderedProminent)
+
+            HStack {
+                TextField("New task...", text: $newTaskDescription)
+                Button("Create") {
+                    Task {
+                        try await service.createTask(description: newTaskDescription)
+                        newTaskDescription = ""
+                        tasks = try await service.fetchTasks()
+                    }
+                }
+            }
+            .padding()
         }
-        .padding()
+        .task {
+            tasks = try! await service.fetchTasks()
+        }
     }
 }
