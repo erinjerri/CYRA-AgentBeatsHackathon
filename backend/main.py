@@ -142,5 +142,5 @@ async def evaluate():
         "avg_latency_ms": 85.0,
         "note": "Computed from local files (expandable)",
     }
-from .api.tasks import router as tasks_router
+from backend.api.tasks import router as tasks_router
 app.include_router(tasks_router)
