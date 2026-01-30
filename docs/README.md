@@ -51,33 +51,79 @@ The green agent serves as the deterministic evaluation spine, validating visionO
 
 ### Mermaid.js diagram
 ```mermaid
-graph TD
-    N[iOS / VisionOS  <br/>Client Environment] --> N
-    N --> N
-    A[iOS app/visionOS UI <br/>Immersive/Windowed Spaces App]
-    B[SwiftData]
-    C[Evaluation & Control Layer]
-    D[AgentBeats Controller SDK / Earthshaker]
-    E[Infrastructure and Tooling <br/>Layer]
-    F[FastAPI Backend <br/>A2A Server Interface]
-    G[MCP Server Dynamic Tool Discovery]
-    H[Ampersend SDK Edge & Node Node<br/> Finance<br/>Agent]
-    I[Lambda.ai Store JSON Trajectory Logs]
-    J[Lambda.ai Cloud]
-    K[v2 Finance Agent]
-    L[Empty]
-    M[Empty]
-    O[Purple Agent <br/>Assessee / Solver]
-    P[&quot;Green Agent Assessor / Judge]
-    Q[Empty]
-    R[Apple Pay API]
-    S[VisionKit / CoreML Visual Context Capture]
-    T[Swift AppIntents / Native Tool Interface]
-    U[Green Agent]
-    V[User Input]
-    W[Speech-to-Text <br/>Voice Transcription]
-    X[Text Input]
-    Y[MCP Server]
+
+flowchart TB
+    subgraph Client_Spatial_Env["visionOS Client Environment"]
+        User(("User"))
+        STT["Speech-to-Text <br>Voice Transcription"]
+        VK["VisionKit / CoreML <br>Visual Context Capture"]
+        VP["visionOS App UI <br>Immersive/Windowed Spaces"]
+        SD[("SwiftData Persistence <br>Local World State")]
+        AI["Swift AppIntents <br>Native Tool Interface"]
+    end
+    
+    subgraph AgentBeats_Platform["Evaluation & Control Layer"]
+        Green["Green Agent <br>Assessor / Judge"]
+        Purple["Purple Agent <br>Assessee / Solver"]
+        Ctrl["AgentBeats Controller <br>SDK / Earthshaker"]
+    end
+    
+    subgraph Backend_Bridge["Infrastructure & Tooling Layer"]
+        FastAPI["FastAPI Backend <br>State & Orchestration Server"]
+        A2A["A2A Protocol Interface <br>AgentBeats Compliance Layer"]
+        MCP["MCP Server <br>Dynamic Tool Discovery"]
+        Ampersend["Ampersend SDK <br>Edge & Node Finance"]
+    end
+    
+    subgraph Cloud_Telemetry["Lambda.ai Cloud"]
+        TeleStore[("Lambda.ai Store <br>JSON Trajectory Logs")]
+    end
+    
+    %% User Input Flow
+    User -->|"Voice/Visual Intent"| STT & VK
+    STT -->|"Raw Context"| VP
+    VK -->|"Raw Context"| VP
+    
+    %% Client Internal Flow
+    VP <-->|"Internal State"| SD
+    AI -.->|"Tool Calls"| VP
+    
+    %% Client to Backend
+    SD <-->|"State Sync: JSON"| FastAPI
+    
+    %% Backend Internal Flow
+    FastAPI -->|"Implements"| A2A
+    FastAPI <-->|"Tool Registry"| MCP
+    FastAPI -->|"Financial Ops"| Ampersend
+    
+    %% Agent Communication via A2A
+    A2A <-->|"Agent Messages"| Ctrl
+    Ctrl -.->|"Orchestrates"| Green & Purple
+    
+    %% Agent to Client (Results)
+    Green & Purple -->|"Task Results"| A2A
+    A2A -->|"Response"| FastAPI
+    FastAPI -->|"Updates"| SD
+    
+    %% Telemetry
+    FastAPI -->|"Trajectory Logs"| TeleStore
+    Ctrl -->|"Evaluation Metrics"| TeleStore
+    
+    %% Tool Discovery Flow
+    MCP -.->|"Available Tools"| A2A
+    
+    classDef clientStyle fill:#E3F2FD,stroke:#1976D2,stroke-width:2px
+    classDef agentStyle fill:#F3E5F5,stroke:#7B1FA2,stroke-width:2px
+    classDef backendStyle fill:#FFF3E0,stroke:#F57C00,stroke-width:2px
+    classDef protocolStyle fill:#E0F2F1,stroke:#00897B,stroke-width:3px
+    classDef cloudStyle fill:#E8F5E9,stroke:#388E3C,stroke-width:2px
+    classDef storageStyle fill:#E1F5FE,stroke:#0277BD,stroke-width:2px
+    
+    class User,STT,VK,VP,AI clientStyle
+    class SD,TeleStore storageStyle
+    class Green,Purple,Ctrl agentStyle
+    class FastAPI,MCP,Ampersend backendStyle
+    class A2A protocolStyle
 ```
 
 **Green Agent Responsibilities:**
