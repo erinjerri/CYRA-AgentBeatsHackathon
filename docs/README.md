@@ -46,73 +46,36 @@ flowchart LR
 
 The green agent serves as the deterministic evaluation spine, validating visionOS streams, enforcing task rules, and logging traceable scores.
 
+
 ```
 ---
-config:
-  layout: dagre
----
-flowchart TB
-
-%% ========== Client ==========
-subgraph Client["visionOS / iOS Client"]
-    User(("User"))
-    SpeechApple["Speech Recognition<br/>Speech.framework"]
-    Vision["Vision Input<br/>VisionKit + OCR"]
-    TaskSchema["TaskSchema<br/>Unified Intent"]
-end
-
-User --> SpeechApple --> TaskSchema
-User --> Vision --> TaskSchema
-
-%% ========== Reasoning ==========
-subgraph AppleFM["Apple Foundation Models"]
-    FM["LLM Reasoning<br/>+ Function Calling"]
-end
-
-TaskSchema --> FM
-
-%% ========== MCP ==========
-subgraph MCP_Server["MCP Server"]
-    Registry["Tool Registry"]
-    Validator["Schema Validation"]
-    Router["Execution Router"]
-    Hooks["Telemetry Hooks"]
-end
-
-FM --> Registry
-Registry --> Validator
-Validator --> Router
-Router --> Hooks
-
-%% ========== Tools ==========
-subgraph Tools["Tool Targets"]
-    Swift["On-device Swift Tools"]
-    API["FastAPI Backend"]
-end
-
-Router --> Swift
-Router --> API
-
-%% ========== Telemetry ==========
-subgraph Telemetry["Lambda.ai"]
-    Store[("JSON Traces<br/>Scores + Trajectories")]
-end
-
-Hooks --> Store
-
-%% ========== Agents (Conceptual) ==========
-subgraph Agents["AgentBeats Agents (Logical Roles)"]
-    Purple["Purple Agent<br/>Solver"]
-    Green["Green Agent<br/>Judge"]
-    Controller["AgentBeats Controller / SDK"]
-end
-
-%% --- Observational / Control Links ---
-Purple -. observes .-> FM
-Purple -. invokes tools via .-> MCP_Server
-Green -. evaluates traces .-> Store
-Controller -. configures .-> Purple
-Controller -. configures .-> Green
+graph TD
+    N[iOS / VisionOS  <br/>Client Environment] --> N
+    N --> N
+    A[iOS app/visionOS UI <br/>Immersive/Windowed Spaces App]
+    B[SwiftData]
+    C[Evaluation & Control Layer]
+    D[AgentBeats Controller SDK / Earthshaker]
+    E[Infrastructure and Tooling <br/>Layer]
+    F[FastAPI Backend <br/>A2A Server Interface]
+    G[MCP Server Dynamic Tool Discovery]
+    H[Ampersend SDK Edge & Node Node<br/> Finance<br/>Agent]
+    I[Lambda.ai Store JSON Trajectory Logs]
+    J[Lambda.ai Cloud]
+    K[v2 Finance Agent]
+    L[Empty]
+    M[Empty]
+    O[Purple Agent <br/>Assessee / Solver]
+    P[&quot;Green Agent Assessor / Judge]
+    Q[Empty]
+    R[Apple Pay API]
+    S[VisionKit / CoreML Visual Context Capture]
+    T[Swift AppIntents / Native Tool Interface]
+    U[Green Agent]
+    V[User Input]
+    W[Speech-to-Text <br/>Voice Transcription]
+    X[Text Input]
+    Y[MCP Server]
 ```
 
 **Green Agent Responsibilities:**
