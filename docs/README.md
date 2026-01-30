@@ -46,7 +46,7 @@ flowchart LR
 
 The green agent serves as the deterministic evaluation spine, validating visionOS streams, enforcing task rules, and logging traceable scores.
 
-# System Design 
+## System Design 
 ![CYRA System Design](https://github.com/erinjerri/CYRA-AgentBeatsHackathon/blob/main/docs/cyra-system-design-IA-diagram-mermaid-figma-v2.png)
 
 ### Mermaid.js diagram
@@ -304,7 +304,7 @@ The CYRA framework evaluates agents across these dimensions:
 4. **Multi-modal Integration** - Effective use of speech, vision, and context data
 5. **Deterministic Scoring** - Consistency and verifiability of evaluation outcomes
 
-# To-Do List
+## To-Do List
 ## 🟩 Part 1 — Green Agent Hackathon (Current Submission)
 
 | Time / Part                                        | Task Description                                                                                                                                                                                                                                                                                                                                 | Done |
@@ -322,7 +322,7 @@ The CYRA framework evaluates agents across these dimensions:
 | Part 1               | Fill hackathon form: Abstract; GitHub link; Video URL. Double-check requirements. Shut down instance.                                                                                                                                                                                                                                             |      |
 | Jan 15, 4:00–11:59 PM                              | Buffer for last-minute fixes + final submission.                                                                                                                                                                                                                                                                                                  |      |
 
-# To-Do List - Purple Agent (2nd half of hackathon)
+## To-Do List - Purple Agent (2nd half of hackathon)
 ## 🟪 Part 2 — Purple Agent (Post‑Hackathon Expansion)
 ### 🟣 Part 2 — Purple Agent (Architecture, A2A Pipeline, Multimodal Backlog, MongoDB, Pydantic)
 
@@ -364,7 +364,7 @@ The CYRA framework evaluates agents across these dimensions:
 | Purple Agent — Swift Client Update (TaskModel v2)  | Update Swift client to consume typed responses (TaskModel v2) from MongoDB-backed API.                                                                                                                                                                                                                                                             | [ ]  |
 | Purple Agent — Migration Script                    | Add migration script to convert existing JSON tasks → MongoDB documents.                                                                                                                                                                                                                                                                           | [ ]  |                                                                                                                                                                                                                      |      |
 
-# UPDATED TASKS AS OF 1/29/26
+## UPDATED TASKS AS OF 1/29/26
 ## Project Roadmap & Status
 
 ## Phase 1 To-Do List (Green Agent – Benchmark & Evaluator)  
