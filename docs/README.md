@@ -29,36 +29,90 @@ CYRA is a visionOS-native agent evaluation framework designed for the AgentBeats
 
 ## System Architecture
 
+tl;dr
+- The app data flow 
+- 
+
+flowchart LR
+    Capture["Capture<br/>(User Input Data)"]
+    Normalize["Normalize"]
+    Reason["Reason"]
+    Execute["Execute"]
+
+    Capture --> Normalize --> Reason --> Execute
+    TaskSchema["TaskSchema"] -. feeds .-> Normalize
+    
 ### Green Agent (Referee)
 
 The green agent serves as the deterministic evaluation spine, validating visionOS streams, enforcing task rules, and logging traceable scores.
 
-```mermaid
+```
+---
+config:
+  layout: dagre
+---
 flowchart TB
-    subgraph Client["visionOS Client"]
-        STT["Speech-to-Text"]
-        VK["VisionKit / CoreML"]
-        UI["visionOS UI"]
-        SD["SwiftData State"]
-    end
 
-    subgraph Backend["FastAPI Backend"]
-        API["/process + /tasks"]
-        Eval["/evaluate (Green)"]
-        Store["Local JSON Storage"]
-    end
+%% ========== Client ==========
+subgraph Client["visionOS / iOS Client"]
+    User(("User"))
+    SpeechApple["Speech Recognition<br/>Speech.framework"]
+    Vision["Vision Input<br/>VisionKit + OCR"]
+    TaskSchema["TaskSchema<br/>Unified Intent"]
+end
 
-    subgraph EvalLayer["Green Agent Assessor"]
-        Assessor["State Matching + Action Assertions"]
-    end
+User --> SpeechApple --> TaskSchema
+User --> Vision --> TaskSchema
 
-    STT --> UI
-    VK --> UI
-    UI --> SD
-    SD --> API
-    API --> Store
-    Store --> Assessor
-    Assessor --> Eval
+%% ========== Reasoning ==========
+subgraph AppleFM["Apple Foundation Models"]
+    FM["LLM Reasoning<br/>+ Function Calling"]
+end
+
+TaskSchema --> FM
+
+%% ========== MCP ==========
+subgraph MCP_Server["MCP Server"]
+    Registry["Tool Registry"]
+    Validator["Schema Validation"]
+    Router["Execution Router"]
+    Hooks["Telemetry Hooks"]
+end
+
+FM --> Registry
+Registry --> Validator
+Validator --> Router
+Router --> Hooks
+
+%% ========== Tools ==========
+subgraph Tools["Tool Targets"]
+    Swift["On-device Swift Tools"]
+    API["FastAPI Backend"]
+end
+
+Router --> Swift
+Router --> API
+
+%% ========== Telemetry ==========
+subgraph Telemetry["Lambda.ai"]
+    Store[("JSON Traces<br/>Scores + Trajectories")]
+end
+
+Hooks --> Store
+
+%% ========== Agents (Conceptual) ==========
+subgraph Agents["AgentBeats Agents (Logical Roles)"]
+    Purple["Purple Agent<br/>Solver"]
+    Green["Green Agent<br/>Judge"]
+    Controller["AgentBeats Controller / SDK"]
+end
+
+%% --- Observational / Control Links ---
+Purple -. observes .-> FM
+Purple -. invokes tools via .-> MCP_Server
+Green -. evaluates traces .-> Store
+Controller -. configures .-> Purple
+Controller -. configures .-> Green
 ```
 
 **Green Agent Responsibilities:**
@@ -75,35 +129,6 @@ flowchart TB
 ### Purple Agent (Assessee)
 
 The purple agent simulates the challenger agent that the green referee evaluates, exercising A2A/MCP integrations and providing stress-test scenarios.
-
-```mermaid
-flowchart TB
-    subgraph PurpleAgent["Purple Agent (Assessee)"]
-        Reason["Reasoning Loop"]
-        Tools["Tool Calls (A2A/MCP)"]
-        Memory["Short-Term Memory"]
-    end
-
-    subgraph Assessor["Assessor Agent (Green Winner)"]
-        Kickoff["Kickoff Script"]
-        Score["Scoring Logic"]
-        Trace["Trace Logging"]
-    end
-
-    subgraph Platform["AgentBeats Platform"]
-        A2A["A2A Server"]
-        MCP["MCP Tool Layer"]
-        Registry["Agent Registry"]
-    end
-
-    Kickoff --> PurpleAgent
-    PurpleAgent --> Tools
-    Tools --> MCP
-    PurpleAgent --> Assessor
-    Assessor --> Score
-    Score --> Trace
-    PurpleAgent --> Registry
-```
 
 **Purple Agent Responsibilities:**
 - **Reasoning core**: Reasoning loop formulates plans, selects tools, and updates short-term memory to mimic real agent behavior
@@ -327,6 +352,59 @@ The CYRA framework evaluates agents across these dimensions:
 | Purple Agent — Reasoning Pipeline (Structured)     | Implement Purple Agent reasoning pipeline using structured task objects backed by Pydantic + MongoDB.                                                                                                                                                                                                                                              | [ ]  |
 | Purple Agent — Swift Client Update (TaskModel v2)  | Update Swift client to consume typed responses (TaskModel v2) from MongoDB-backed API.                                                                                                                                                                                                                                                             | [ ]  |
 | Purple Agent — Migration Script                    | Add migration script to convert existing JSON tasks → MongoDB documents.                                                                                                                                                                                                                                                                           | [ ]  |                                                                                                                                                                                                                      |      |
+
+# UPDATED TASKS AS OF 1/29/26
+## Project Roadmap & Status
+
+## Phase 1 To-Do List (Green Agent – Benchmark & Evaluator)  
+**Deadline: Jan 31, 2026 11:59 PM PT**  
+Focus: Fix blockers → A2A-compliant Dockerized Green Agent → Baseline Purple + leaderboard visibility (activity + results on agentbeats.dev profile) → Reproducible evals → Demo & Submit.
+
+| Category              | Task Description                                                                 | Done |
+|-----------------------|----------------------------------------------------------------------------------|------|
+| Debugging             | Fix telemetry JSON logging in Vision Pro simulator: Task creation → populated JSON in backend/storage/telemetry/ (debug Xcode settings, SwiftData sync, FastAPI endpoint) | [ ]  |
+| Cleanup / Scope       | Drop/defer non-MVP features: Remove Ampersend/finance integration, STT (Apple/Whisper), CV (VisionKit/OCR), MongoDB persistence; hardcode sample intents; update README with "Dropped for Phase 1 MVP" note | [ ]  |
+| A2A Compliance        | Fork https://github.com/RDI-Foundation/green-agent-template; port FastAPI A2A logic (adapt messenger.py, executor.py, scoring/assessor patterns); integrate task creation eval stub; test local run (uv run src/server.py on port 9009) | [ ]  |
+| Containerization      | Build & publish public Docker image from template (ghcr.io/erinjerri/cyra-green:latest); test docker run -p 9009:9009; enable public access in GHCR; standardize host (0.0.0.0) & Dockerfile | [ ]  |
+| A2A Interface         | Ensure A2A protocol compliance: Implement standard message handling (task assignment, response submission, scoring) via ported template; add any missing /a2a endpoints if required | [ ]  |
+| Baseline Purple       | Register baseline Purple agent: Use simple stub (echo/dummy responder from agent-template or tutorial example); build/push Docker (ghcr.io/erinjerri/cyra-baseline-purple:latest); register on agentbeats.dev as Purple type | [ ]  |
+| Leaderboard Setup     | Create public leaderboard repo from https://github.com/RDI-Foundation/agentbeats-leaderboard-template; edit scenario.toml (Green + Purple IDs, domain=productivity, 3–5 tasks) | [ ]  |
+| Webhook Integration   | Connect leaderboard repo to agent page: Edit https://agentbeats.dev/erinjerri/create-your-reality → add repo URL; paste DuckDB query; copy webhook URL; add webhook in repo Settings (Payload = webhook URL, JSON content type) | [ ]  |
+| Reproducibility       | Run 1–2+ assessments: Push scenario.toml → GitHub Actions → merge PR with results JSON; repeat with minor config variation (e.g., num_tasks) to demonstrate reproducibility | [ ]  |
+| Visibility Check      | Verify profile updates: Refresh agentbeats.dev page → confirm Leaderboards section appears + activity entries (e.g., "benchmarked [purple] (Results: abc123)") | [ ]  |
+| Deterministic Scoring | Implement/verify automated backend scoring (metrics for task success, planning efficiency, intent accuracy) in ported template (integrate existing scoring.py if applicable) | [ ]  |
+| Repro / Consistency   | Add DB/reset scripts or config for 100% run consistency (e.g., fixed seeds, sample tasks in datasets/) | [ ]  |
+| Demo & Submission     | Record/edit 3-min demo video: Intro (30s), Vision Pro sim + telemetry JSON (1min), A2A/backend flow + profile screenshot with leaderboard/activity (1min), results/call to action (30s); upload YouTube unlisted | [ ]  |
+| Submission Polish     | Finalize submission: Update Google form with GitHub link, Docker ref, video link, abstract ("VisionOS productivity task creation Green Agent benchmark via A2A"); polish README/LinkedIn draft; submit by deadline | [ ]  |
+
+**Success Criteria for Phase 1**
+- [ ] Docker image public & end-to-end runnable
+- [ ] Baseline Purple registered
+- [ ] Leaderboard repo connected + webhook active
+- [ ] Profile shows Leaderboards + at least 1–2 benchmarked activity entries
+- [ ] 2+ reproducible eval runs (merged PRs, consistent config)
+- [ ] Video + abstract submitted
+
+## Phase 2 Backlog (Purple Agent – Competing Agent) — Deadline: March 30, 2026
+
+Deferred post-Phase 1. Expand later.
+
+| Category              | Task Description                                                                 | Done |
+|-----------------------|----------------------------------------------------------------------------------|------|
+| Reasoning             | Structured multi-step planning with validated Pydantic task objects for complex tasks | [ ]  |
+| Finance (Deferred)    | Spatial payments integration: Apple Pay (AP2) + Skyfire/Ampersend multi-agent protocols | [ ]  |
+| UI/UX                 | Volumetric/immersive 3D dashboards & task creation volumes via RealityKit (VisionOS) | [ ]  |
+| Sync                  | Apple ecosystem cross-device persistence (iCloud) + HealthKit biometric context | [ ]  |
+| Multimodal (Deferred) | Re-enable Foundation STT + VisionKit capture for full physical object → task flow | [ ]  |
+| Data Layer (Deferred) | Re-introduce MongoDB Atlas + Pydantic enforcement if needed for persistence | [ ]  |
+| Leaderboard           | Performance tuning & optimization for public AgentX leaderboard scores | [ ]  |
+
+
+
+
+
+
+
 ## Contributing
 
 1. Fork the repository
