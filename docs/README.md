@@ -1,5 +1,7 @@
 # CYRA AgentBeats Hackathon
-## Abstract 
+
+## Abstract
+
 Create Your Reality Agent (CYRA) is a spatial-computing-native Green Agent benchmark built to evaluate embodied agent behavior in immersive AR/VR environments, following the design principles outlined in Establishing Best Practices for Building Rigorous Agentic Benchmarks (Zhu et al., 2025) and the AgentBeats Agentified Agent Assessment (AAA) framework.
 
 Existing agent benchmarks such as OSWorld, WebArena, and τ-bench primarily evaluate agents through browser-based or API-centric tasks. CYRA extends this evaluation paradigm into spatial computing, measuring how agents perceive, reason, and act within 3D, multimodal interfaces while introducing spatial task competency as a first-class evaluation dimension.
@@ -21,6 +23,7 @@ CYRA, together with its complementary Purple Assessor Agent, forms a reusable, e
 CYRA is a visionOS-native agent evaluation framework designed for the AgentBeats Hackathon. The system pairs a deterministic "green agent" referee with a purpose-built "purple agent" challenger to stress-test the AgentBeats judging rubric through verifiable multi-modal evaluations.  
 
 **Key Features:**  
+
 - Vision-native sensing: visionOS client streams speech, vision, and SwiftData context into the FastAPI referee for synchronized multi-modal processing.  
 - FastAPI referee core: Backend endpoints orchestrate task dispatch, evaluation triggers, and JSON state persistence to keep traces auditable.  
 - Deterministic scoring: Green agent assessor enforces state matching plus action assertions to meet verifiable evaluation criteria.  
@@ -30,8 +33,9 @@ CYRA is a visionOS-native agent evaluation framework designed for the AgentBeats
 ## System Architecture
 
 tl;dr
-- The app data flow 
-- 
+
+- The app data flow
+-
 
 flowchart LR
     Capture["Capture<br/>(User Input Data)"]
@@ -46,10 +50,12 @@ flowchart LR
 
 The green agent serves as the deterministic evaluation spine, validating visionOS streams, enforcing task rules, and logging traceable scores.
 
-## System Design 
+## System Design
+
 ![CYRA System Design](https://github.com/erinjerri/CYRA-AgentBeatsHackathon/blob/main/docs/cyra-system-design-IA-diagram-mermaid-figma-v2.png)
 
 ### Mermaid.js diagram
+
 ```mermaid
 
 flowchart TB
@@ -127,11 +133,13 @@ flowchart TB
 ```
 
 **Green Agent Responsibilities:**
+
 - **Sensing tier**: Speech-to-text, VisionKit/CoreML, and SwiftData surfaces feed a cohesive visionOS UI that captures operator intent and environment context
 - **Control tier**: FastAPI routes /process and /tasks endpoints synchronize state, trigger evaluations, and persist JSON artifacts for auditability
 - **Scoring tier**: State-matching plus action assertions convert observations into pass/fail decisions with explainable logs
 
 **Flow:**
+
 1. Capture multi-modal cues on visionOS and persist via SwiftData
 2. Forward context to FastAPI for task orchestration and storage
 3. Route triggers through the green assessor to verify state and actions
@@ -142,11 +150,13 @@ flowchart TB
 The purple agent simulates the challenger agent that the green referee evaluates, exercising A2A/MCP integrations and providing stress-test scenarios.
 
 **Purple Agent Responsibilities:**
+
 - **Reasoning core**: Reasoning loop formulates plans, selects tools, and updates short-term memory to mimic real agent behavior
 - **Tooling**: A2A/MCP tool calls stress-test platform integrations while feeding the judge with execution traces
 - **Registry & scoring**: Agent registry registration and trace logging enable the green winner to score every interaction
 
 **Flow:**
+
 1. Kickoff script seeds the purple agent with evaluation objectives
 2. Reasoning loop iterates, invoking tools through A2A/MCP layers
 3. Interactions stream to the assessor for scoring and trace capture
@@ -278,17 +288,20 @@ open CYRA.xcodeproj
 ## Usage
 
 ### Running the Backend
+
 ```bash
 cd backend
 uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
 ### Running the visionOS Client
+
 1. Open `CYRA.xcodeproj` in Xcode
 2. Select the visionOS simulator as target
 3. Build and run (Cmd+R)
 
 ### Running Evaluations
+
 ```bash
 cd evaluation
 python scripts/run_evaluation.py --dataset visionos_scenarios.json
@@ -305,6 +318,7 @@ The CYRA framework evaluates agents across these dimensions:
 5. **Deterministic Scoring** - Consistency and verifiability of evaluation outcomes
 
 ## To-Do List
+
 ## 🟩 Part 1 — Green Agent Hackathon (Current Submission)
 
 | Time / Part                                        | Task Description                                                                                                                                                                                                                                                                                                                                 | Done |
@@ -323,7 +337,9 @@ The CYRA framework evaluates agents across these dimensions:
 | Jan 15, 4:00–11:59 PM                              | Buffer for last-minute fixes + final submission.                                                                                                                                                                                                                                                                                                  |      |
 
 ## To-Do List - Purple Agent (2nd half of hackathon)
+
 ## 🟪 Part 2 — Purple Agent (Post‑Hackathon Expansion)
+
 ### 🟣 Part 2 — Purple Agent (Architecture, A2A Pipeline, Multimodal Backlog, MongoDB, Pydantic)
 
 | Component                                           | Task Description                                                                                                                                                                                                                                                                                                                                 | Done |
@@ -365,9 +381,11 @@ The CYRA framework evaluates agents across these dimensions:
 | Purple Agent — Migration Script                    | Add migration script to convert existing JSON tasks → MongoDB documents.                                                                                                                                                                                                                                                                           | [ ]  |                                                                                                                                                                                                                      |      |
 
 ## UPDATED TASKS AS OF 1/29/26
+
 ## Project Roadmap & Status
 
 ## Phase 1 To-Do List (Green Agent – Benchmark & Evaluator)  
+
 **Deadline: Jan 31, 2026 11:59 PM PT**  
 Focus: Fix blockers → A2A-compliant Dockerized Green Agent → Baseline Purple + leaderboard visibility (activity + results on agentbeats.dev profile) → Reproducible evals → Demo & Submit.
 
@@ -375,12 +393,12 @@ Focus: Fix blockers → A2A-compliant Dockerized Green Agent → Baseline Purple
 |-----------------------|----------------------------------------------------------------------------------|------|
 | Debugging             | Fix telemetry JSON logging in Vision Pro simulator: Task creation → populated JSON in backend/storage/telemetry/ (debug Xcode settings, SwiftData sync, FastAPI endpoint) | [ ]  |
 | Cleanup / Scope       | Drop/defer non-MVP features: Remove Ampersend/finance integration, STT (Apple/Whisper), CV (VisionKit/OCR), MongoDB persistence; hardcode sample intents; update README with "Dropped for Phase 1 MVP" note | [ ]  |
-| A2A Compliance        | Fork https://github.com/RDI-Foundation/green-agent-template; port FastAPI A2A logic (adapt messenger.py, executor.py, scoring/assessor patterns); integrate task creation eval stub; test local run (uv run src/server.py on port 9009) | [ ]  |
+| A2A Compliance        | Fork <https://github.com/RDI-Foundation/green-agent-template>; port FastAPI A2A logic (adapt messenger.py, executor.py, scoring/assessor patterns); integrate task creation eval stub; test local run (uv run src/server.py on port 9009) | [ ]  |
 | Containerization      | Build & publish public Docker image from template (ghcr.io/erinjerri/cyra-green:latest); test docker run -p 9009:9009; enable public access in GHCR; standardize host (0.0.0.0) & Dockerfile | [ ]  |
 | A2A Interface         | Ensure A2A protocol compliance: Implement standard message handling (task assignment, response submission, scoring) via ported template; add any missing /a2a endpoints if required | [ ]  |
 | Baseline Purple       | Register baseline Purple agent: Use simple stub (echo/dummy responder from agent-template or tutorial example); build/push Docker (ghcr.io/erinjerri/cyra-baseline-purple:latest); register on agentbeats.dev as Purple type | [ ]  |
-| Leaderboard Setup     | Create public leaderboard repo from https://github.com/RDI-Foundation/agentbeats-leaderboard-template; edit scenario.toml (Green + Purple IDs, domain=productivity, 3–5 tasks) | [ ]  |
-| Webhook Integration   | Connect leaderboard repo to agent page: Edit https://agentbeats.dev/erinjerri/create-your-reality → add repo URL; paste DuckDB query; copy webhook URL; add webhook in repo Settings (Payload = webhook URL, JSON content type) | [ ]  |
+| Leaderboard Setup     | Create public leaderboard repo from <https://github.com/RDI-Foundation/agentbeats-leaderboard-template>; edit scenario.toml (Green + Purple IDs, domain=productivity, 3–5 tasks) | [ ]  |
+| Webhook Integration   | Connect leaderboard repo to agent page: Edit <https://agentbeats.dev/erinjerri/create-your-reality> → add repo URL; paste DuckDB query; copy webhook URL; add webhook in repo Settings (Payload = webhook URL, JSON content type) | [ ]  |
 | Reproducibility       | Run 1–2+ assessments: Push scenario.toml → GitHub Actions → merge PR with results JSON; repeat with minor config variation (e.g., num_tasks) to demonstrate reproducibility | [ ]  |
 | Visibility Check      | Verify profile updates: Refresh agentbeats.dev page → confirm Leaderboards section appears + activity entries (e.g., "benchmarked [purple] (Results: abc123)") | [ ]  |
 | Deterministic Scoring | Implement/verify automated backend scoring (metrics for task success, planning efficiency, intent accuracy) in ported template (integrate existing scoring.py if applicable) | [ ]  |
@@ -389,6 +407,7 @@ Focus: Fix blockers → A2A-compliant Dockerized Green Agent → Baseline Purple
 | Submission Polish     | Finalize submission: Update Google form with GitHub link, Docker ref, video link, abstract ("VisionOS productivity task creation Green Agent benchmark via A2A"); polish README/LinkedIn draft; submit by deadline | [ ]  |
 
 **Success Criteria for Phase 1**
+
 - [ ] Docker image public & end-to-end runnable
 - [ ] Baseline Purple registered
 - [ ] Leaderboard repo connected + webhook active
@@ -409,12 +428,6 @@ Deferred post-Phase 1. Expand later.
 | Multimodal (Deferred) | Re-enable Foundation STT + VisionKit capture for full physical object → task flow | [ ]  |
 | Data Layer (Deferred) | Re-introduce MongoDB Atlas + Pydantic enforcement if needed for persistence | [ ]  |
 | Leaderboard           | Performance tuning & optimization for public AgentX leaderboard scores | [ ]  |
-
-
-
-
-
-
 
 ## Contributing
 
