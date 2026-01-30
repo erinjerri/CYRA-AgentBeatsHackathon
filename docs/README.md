@@ -47,12 +47,10 @@ flowchart LR
 The green agent serves as the deterministic evaluation spine, validating visionOS streams, enforcing task rules, and logging traceable scores.
 
 # System Design 
-![CYRA System Design]
-(https://github.com/erinjerri/CYRA-AgentBeatsHackathon/blob/main/docs/cyra-system-design-IA-diagram-mermaid-figma-v2.png)
+![CYRA System Design](https://github.com/erinjerri/CYRA-AgentBeatsHackathon/blob/main/docs/cyra-system-design-IA-diagram-mermaid-figma-v2.png)
 
 ### Mermaid.js diagram
 ```
----
 graph TD
     N[iOS / VisionOS  <br/>Client Environment] --> N
     N --> N
