@@ -50,7 +50,7 @@ The green agent serves as the deterministic evaluation spine, validating visionO
 ![CYRA System Design](https://github.com/erinjerri/CYRA-AgentBeatsHackathon/blob/main/docs/cyra-system-design-IA-diagram-mermaid-figma-v2.png)
 
 ### Mermaid.js diagram
-```
+```mermaid
 graph TD
     N[iOS / VisionOS  <br/>Client Environment] --> N
     N --> N
