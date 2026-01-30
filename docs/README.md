@@ -47,7 +47,7 @@ flowchart LR
 The green agent serves as the deterministic evaluation spine, validating visionOS streams, enforcing task rules, and logging traceable scores.
 
 # System Design
-`![alt text](cyra-system-design-IA-diagram-mermaid-figma-v2.png)
+`![alt text](/docs/cyra-system-design-IA-diagram-mermaid-figma-v2.png)
 `
 
 ```
