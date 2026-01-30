@@ -20,23 +20,23 @@ CYRA, together with its complementary Purple Assessor Agent, forms a reusable, e
 
 ## tl;dr - Description
 
-CYRA is a visionOS-native agent evaluation framework designed for the AgentBeats Hackathon. The system pairs a deterministic "green agent" referee with a purpose-built "purple agent" challenger to stress-test the AgentBeats judging rubric through verifiable multi-modal evaluations.  
+CYRA is a visionOS-native agent evaluation framework designed for the AgentBeats Hackathon. The system pairs a deterministic "green agent" referee with a purpose-built "purple agent" challenger to stress-test the AgentBeats judging rubric through verifiable multi-modal evaluations.
 
-**Key Features:**  
+**Key Features:**
 
-- Vision-native sensing: visionOS client streams speech, vision, and SwiftData context into the FastAPI referee for synchronized multi-modal processing.  
-- FastAPI referee core: Backend endpoints orchestrate task dispatch, evaluation triggers, and JSON state persistence to keep traces auditable.  
-- Deterministic scoring: Green agent assessor enforces state matching plus action assertions to meet verifiable evaluation criteria.  
-- Purple agent stress test: Purpose-built purple agent probes A2A/MCP integrations while the green referee logs every scoring decision.  
-- Traceable judging trail: Trace logging bridges both agents so judges can replay tool calls, scores, and mismatches directly on AgentBeats.  
+- Vision-native sensing: visionOS client streams speech, vision, and SwiftData context into the FastAPI referee for synchronized multi-modal processing.
+- FastAPI referee core: Backend endpoints orchestrate task dispatch, evaluation triggers, and JSON state persistence to keep traces auditable.
+- Deterministic scoring: Green agent assessor enforces state matching plus action assertions to meet verifiable evaluation criteria.
+- Purple agent stress test: Purpose-built purple agent probes A2A/MCP integrations while the green referee logs every scoring decision.
+- Traceable judging trail: Trace logging bridges both agents so judges can replay tool calls, scores, and mismatches directly on AgentBeats.
 
 ## System Architecture
 
 tl;dr
 
 - The app data flow
--
 
+```mermaid
 flowchart LR
     Capture["Capture<br/>(User Input Data)"]
     Normalize["Normalize"]
@@ -45,7 +45,8 @@ flowchart LR
 
     Capture --> Normalize --> Reason --> Execute
     TaskSchema["TaskSchema"] -. feeds .-> Normalize
-    
+```
+
 ### Green Agent (Referee)
 
 The green agent serves as the deterministic evaluation spine, validating visionOS streams, enforcing task rules, and logging traceable scores.
@@ -67,64 +68,64 @@ flowchart TB
         SD[("SwiftData Persistence <br>Local World State")]
         AI["Swift AppIntents <br>Native Tool Interface"]
     end
-    
+
     subgraph AgentBeats_Platform["Evaluation & Control Layer"]
         Green["Green Agent <br>Assessor / Judge"]
         Purple["Purple Agent <br>Assessee / Solver"]
         Ctrl["AgentBeats Controller <br>SDK / Earthshaker"]
     end
-    
+
     subgraph Backend_Bridge["Infrastructure & Tooling Layer"]
         FastAPI["FastAPI Backend <br>State & Orchestration Server"]
         A2A["A2A Protocol Interface <br>AgentBeats Compliance Layer"]
         MCP["MCP Server <br>Dynamic Tool Discovery"]
         Ampersend["Ampersend SDK <br>Edge & Node Finance"]
     end
-    
+
     subgraph Cloud_Telemetry["Lambda.ai Cloud"]
         TeleStore[("Lambda.ai Store <br>JSON Trajectory Logs")]
     end
-    
+
     %% User Input Flow
     User -->|"Voice/Visual Intent"| STT & VK
     STT -->|"Raw Context"| VP
     VK -->|"Raw Context"| VP
-    
+
     %% Client Internal Flow
     VP <-->|"Internal State"| SD
     AI -.->|"Tool Calls"| VP
-    
+
     %% Client to Backend
     SD <-->|"State Sync: JSON"| FastAPI
-    
+
     %% Backend Internal Flow
     FastAPI -->|"Implements"| A2A
     FastAPI <-->|"Tool Registry"| MCP
     FastAPI -->|"Financial Ops"| Ampersend
-    
+
     %% Agent Communication via A2A
     A2A <-->|"Agent Messages"| Ctrl
     Ctrl -.->|"Orchestrates"| Green & Purple
-    
+
     %% Agent to Client (Results)
     Green & Purple -->|"Task Results"| A2A
     A2A -->|"Response"| FastAPI
     FastAPI -->|"Updates"| SD
-    
+
     %% Telemetry
     FastAPI -->|"Trajectory Logs"| TeleStore
     Ctrl -->|"Evaluation Metrics"| TeleStore
-    
+
     %% Tool Discovery Flow
     MCP -.->|"Available Tools"| A2A
-    
+
     classDef clientStyle fill:#E3F2FD,stroke:#1976D2,stroke-width:2px
     classDef agentStyle fill:#F3E5F5,stroke:#7B1FA2,stroke-width:2px
     classDef backendStyle fill:#FFF3E0,stroke:#F57C00,stroke-width:2px
     classDef protocolStyle fill:#E0F2F1,stroke:#00897B,stroke-width:3px
     classDef cloudStyle fill:#E8F5E9,stroke:#388E3C,stroke-width:2px
     classDef storageStyle fill:#E1F5FE,stroke:#0277BD,stroke-width:2px
-    
+
     class User,STT,VK,VP,AI clientStyle
     class SD,TeleStore storageStyle
     class Green,Purple,Ctrl agentStyle
@@ -164,7 +165,7 @@ The purple agent simulates the challenger agent that the green referee evaluates
 
 ## Project Structure
 
-```
+```text
 CYRA-AgentBeatsHackathon/
 CYRA-AgentBeatsHackathon/
 ├── README.md
@@ -378,15 +379,15 @@ The CYRA framework evaluates agents across these dimensions:
 | Purple Agent — A2A Schema Versioning               | Add versioned schemas for agent-to-agent communication (A2A).                                                                                                                                                                                                                                                                                      | [ ]  |
 | Purple Agent — Reasoning Pipeline (Structured)     | Implement Purple Agent reasoning pipeline using structured task objects backed by Pydantic + MongoDB.                                                                                                                                                                                                                                              | [ ]  |
 | Purple Agent — Swift Client Update (TaskModel v2)  | Update Swift client to consume typed responses (TaskModel v2) from MongoDB-backed API.                                                                                                                                                                                                                                                             | [ ]  |
-| Purple Agent — Migration Script                    | Add migration script to convert existing JSON tasks → MongoDB documents.                                                                                                                                                                                                                                                                           | [ ]  |                                                                                                                                                                                                                      |      |
+| Purple Agent — Migration Script                    | Add migration script to convert existing JSON tasks → MongoDB documents.                                                                                                                                                                                                                                                                           | [ ]  |
 
 ## UPDATED TASKS AS OF 1/29/26
 
 ## Project Roadmap & Status
 
-## Phase 1 To-Do List (Green Agent – Benchmark & Evaluator)  
+## Phase 1 To-Do List (Green Agent – Benchmark & Evaluator)
 
-**Deadline: Jan 31, 2026 11:59 PM PT**  
+**Deadline: Jan 31, 2026 11:59 PM PT**
 Focus: Fix blockers → A2A-compliant Dockerized Green Agent → Baseline Purple + leaderboard visibility (activity + results on agentbeats.dev profile) → Reproducible evals → Demo & Submit.
 
 | Category              | Task Description                                                                 | Done |
@@ -463,6 +464,6 @@ If you use CYRA in your research, please cite:
 
 ---
 
-> [!NOTE]  
-> This README follows GitHub's best-practice recommendations for structure, clarity, and completeness. <CitationPill url="https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-readmes" />
+> [!NOTE]
+> This README follows GitHub's best-practice recommendations for structure, clarity, and completeness. See [About READMEs](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-readmes).
 >
