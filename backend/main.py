@@ -57,12 +57,6 @@ async def process_task(payload: TaskPayload, request: Request):
     data["received_at"] = timestamp
     data["source_ip"] = request.client.host
 
-    # Save task JSON
-    task_filename = f"task_{timestamp}.json"
-    task_path = TASK_DIR / task_filename
-    with open(task_path, "w") as f:
-        json.dump(data, f, indent=2)
-
     # Basic intent parsing
     user_text = (
         data.get("user_utterance")
@@ -70,6 +64,19 @@ async def process_task(payload: TaskPayload, request: Request):
         or data.get("task")
         or ""
     )
+
+    # Normalize fields used by the visionOS client UI.
+    data.setdefault("id", str(timestamp))
+    data.setdefault("title", user_text if user_text else "Untitled task")
+    data.setdefault("status", "pending")
+    data.setdefault("priority", 0)
+
+    # Save task JSON
+    task_filename = f"task_{timestamp}.json"
+    task_path = TASK_DIR / task_filename
+    with open(task_path, "w") as f:
+        json.dump(data, f, indent=2)
+
     parsed_intent = (
         "purchase_app"
         if any(word in user_text.lower() for word in ["buy", "purchase"])
