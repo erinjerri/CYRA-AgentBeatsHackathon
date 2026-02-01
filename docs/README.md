@@ -200,109 +200,52 @@ https://youtu.be/RiCsyp49Qn0
 
 ## Project Structure
 
-```text
-CYRA-AgentBeatsHackathon/
-CYRA-AgentBeatsHackathon/
-├── README.md
-├── docs/
-│   ├── architecture.md
-│   ├── evaluation-rubric.md
-│   └── api-reference.md
-├── client/
-│   ├── visionOS/
-│   │   ├── AgentStateSyncService.swift        # NEW (MVP)
-│   │   ├── TaskModel.swift                    # NEW (MVP)
-│   │   ├── MainDashboardView.swift            # NEW (MVP)
-│   │   ├── cyra_agentbeatsApp.swift           # UPDATED (MVP entry point)
-│   │   ├── Assets.xcassets
-│   │
-│   │   # Template / Immersive files (kept for Part 2, not used in MVP)
-│   │   ├── AppModel.swift
-│   │   ├── ImmersiveView.swift
-│   │   ├── SpeechManager.swift
-│   │   ├── VisionManager.swift
-│   │
-│   │   # Deprecated / replaced files (kept for reference, not compiled)
-│   │   ├── ContentView.swift
-│   │   ├── SwiftDataModels.swift
-│   │   └── SpatialAgentApp.swift
-│   │
-│   └── shared/
-│       ├── Models.swift
-│       └── Networking.swift
-│
-├── backend/
-│   ├── app/
-│   │   ├── main.py
-│   │   ├── api/
-│   │   │   ├── __init__.py
-│   │   │   ├── process.py
-│   │   │   ├── tasks.py
-│   │   │   └── evaluate.py
-│   │   ├── core/
-│   │   │   ├── __init__.py
-│   │   │   ├── assessor.py
-│   │   │   ├── scoring.py
-│   │   │   └── storage.py
-│   │   └── models/
-│   │       ├── __init__.py
-│   │       ├── task.py
-│   │       ├── evaluation.py
-│   │       └── trace.py
-│   ├── requirements.txt
-│   └── Dockerfile
-│
-├── agents/
-│   ├── green/
+├── agent.toml
+├── backend
+│   ├── __init__.py
+│   ├── api
 │   │   ├── __init__.py
-│   │   ├── referee.py
-│   │   ├── validators/
-│   │   │   ├── __init__.py
-│   │   │   ├── state_matcher.py
-│   │   │   └── action_assertions.py
-│   │   └── scoring/
-│   │       ├── __init__.py
-│   │       └── deterministic_scorer.py
-│   └── purple/
-│       ├── __init__.py
-│       ├── challenger.py
-│       ├── reasoning/
-│       │   ├── __init__.py
-│       │   ├── planner.py
-│       │   └── memory.py
-│       └── tools/
-│           ├── __init__.py
-│           ├── a2a_client.py
-│           └── mcp_tools.py
-│
-├── evaluation/
-│   ├── datasets/
-│   │   ├── visionos_scenarios.json
-│   │   └── task_definitions.json
-│   ├── scripts/
-│   │   ├── run_evaluation.py
-│   │   └── generate_report.py
-│   └── results/
-│       └── .gitkeep
-│
-├── tests/
-│   ├── unit/
-│   │   ├── test_assessor.py
-│   │   ├── test_scoring.py
-│   │   └── test_agents.py
-│   ├── integration/
-│   │   ├── test_api.py
-│   │   └── test_e2e.py
-│   └── fixtures/
-│       ├── sample_tasks.json
-│       └── mock_traces.json
-│
-└── scripts/
-    ├── setup.sh
-    ├── run_locally.sh
-    └── deploy.sh
-```
-
+│   │   └── tasks.py
+│   ├── dockerfile
+│   ├── main.py
+│   └── storage
+│       ├── storage.py
+│       ├── tasks
+│       └── telemetry
+├── current_tree.txt
+├── cyra-agentbeats
+│   ├── Packages
+│   │   └── RealityKitContent
+│   ├── cyra-agentbeats
+│   │   ├── AgentStateSyncService.swift
+│   │   ├── AppModel.swift
+│   │   ├── Assets.xcassets
+│   │   ├── BackendConfig.swift
+│   │   ├── BackendTask.swift
+│   │   ├── ImmersiveView.swift
+│   │   ├── Info.plist
+│   │   ├── MainDashboard.swift
+│   │   ├── SpatialAgentApp.swift
+│   │   ├── TaskModel.swift
+│   │   ├── TaskService.swift
+│   │   └── cyra_agentbeatsApp.swift
+│   ├── cyra-agentbeats.xcodeproj
+│   │   ├── project.pbxproj
+│   │   ├── project.xcworkspace
+│   │   ├── xcshareddata
+│   │   └── xcuserdata
+│   └── cyra-agentbeatsTests
+│       └── cyra_agentbeatsTests.swift
+├── docs
+│   ├── CYRA-agentbeats-architecture.md
+│   ├── README.md
+│   ├── agent.toml
+│   ├── benchmark-design.md
+│   ├── cyra-system-design-IA-diagram-mermaid-figma-v2.png
+│   ├── dev-log.md
+│   ├── telemetry-spec.md
+│   └── to-do-list.md
+└── requirements.txt
 
 ## Acknowledgments
 
