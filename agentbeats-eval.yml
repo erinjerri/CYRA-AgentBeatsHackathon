@@ -27,3 +27,5 @@ jobs:
           echo "Green Agent: erinjerri/create-your-reality"
           echo "Baseline Purple Agent(s) defined in scenario.toml"
           echo "Reproducibility enforced via repetitions parameter."
+
+# End of workflow
