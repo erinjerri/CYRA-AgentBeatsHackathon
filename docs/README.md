@@ -2,10 +2,17 @@
 
 ## CYRA – AgentBeats Green Agent (Part 1)
 
+### Evaluation Status (AgentBeats)
+
+- CYRA is registered as a Green Agent on AgentBeats with a baseline Purple Agent.
+- The leaderboard and evaluation pipeline are configured; evaluation runs will populate once final webhook provisioning completes.
+- Docker image: `ghcr.io/erinjerri/cyra-green-agent:latest`
+
 **TL;DR**
+
 - **What:** A visionOS-native Green Agent benchmark for embodied, multimodal agent evaluation
 - **How:** Deterministic Green referee + baseline Purple challenger, with full telemetry and reproducible scoring
-- **Run:** `docker pull erinjerri/cyra-green-agent:latest && docker run erinjerri/cyra-green-agent:latest`
+- **Run:** `docker pull ghcr.io/erinjerri/cyra-green-agent:latest && docker run ghcr.io/erinjerri/cyra-green-agent:latest`
 - **Demo:** [https://youtu.be/RiCsyp49Qn0](https://youtu.be/RiCsyp49Qn0)
 - **AgentBeats Profile:** [https://agentbeats.dev/erinjerri/create-your-reality](https://agentbeats.dev/erinjerri/create-your-reality)
 
@@ -198,11 +205,11 @@ The CYRA Green Agent is packaged as a Docker container and can be run end-to-end
 
 #### Docker image
 
-`docker.io/erinjerri/cyra-green-agent:latest`
+`ghcr.io/erinjerri/cyra-green-agent:latest`
 
 ```bash
-docker pull erinjerri/cyra-green-agent:latest
-docker run erinjerri/cyra-green-agent:latest
+docker pull ghcr.io/erinjerri/cyra-green-agent:latest
+docker run ghcr.io/erinjerri/cyra-green-agent:latest
 ```
 
 ## Demo
