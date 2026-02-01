@@ -1,0 +1,23 @@
+{
+  "timestamp": 1769912541,
+  "user_utterance": "",
+  "transcribed_text": "",
+  "parsed_intent": "task_creation",
+  "function_call_name": "process_task",
+  "function_call_args": "{\"task\": \"Study  data structures\", \"received_at\": 1769912541, \"source_ip\": \"127.0.0.1\", \"id\": \"1769912541\", \"title\": \"Study  data structures\", \"status\": \"pending\", \"priority\": 0}",
+  "processing_latency_ms": 4,
+  "task_success": true,
+  "error_type": null,
+  "retry_count": 0,
+  "spatial_action_type": null,
+  "ui_element_targeted": null,
+  "ui_element_selected": false,
+  "gaze_target": null,
+  "gesture_type": null,
+  "interaction_distance": null,
+  "hit_accuracy": 1.0,
+  "transaction_type": null,
+  "argument_validation_passed": true,
+  "step_sequence_correctness": 1.0,
+  "task_filename": "task_1769912541.json"
+}
