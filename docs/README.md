@@ -1,6 +1,15 @@
 # CYRA AgentBeats Hackathon
 
-## Abstract
+# CYRA – AgentBeats Green Agent (Part 1)
+
+**TL;DR**
+- **What:** A visionOS-native Green Agent benchmark for embodied, multimodal agent evaluation
+- **How:** Deterministic Green referee + baseline Purple challenger, with full telemetry and reproducible scoring
+- **Run:** `docker pull erinjerri/cyra-green-agent:latest && docker run erinjerri/cyra-green-agent:latest`
+- **Demo:** https://youtu.be/RiCsyp49Qn0
+- **AgentBeats Profile:** https://agentbeats.dev/erinjerri/create-your-reality
+
+# Abstract
 
 Create Your Reality Agent (CYRA) is a spatial-computing-native Green Agent benchmark built to evaluate embodied agent behavior in immersive AR/VR environments, following the design principles outlined in Establishing Best Practices for Building Rigorous Agentic Benchmarks (Zhu et al., 2025) and the AgentBeats Agentified Agent Assessment (AAA) framework.
 
@@ -146,6 +155,8 @@ flowchart TB
 3. Route triggers through the green assessor to verify state and actions
 4. Emit evaluation verdicts back to the client and judging platform
 
+In the AgentBeats framework, CYRA functions as the **Green Agent (assessor)**, while the Purple Agent represents a **baseline assessee** used to validate evaluation logic, A2A/MCP integration points, and reproducibility. The architecture is intentionally modular so that additional Purple Agents can be registered and assessed without changes to the Green Agent core.
+
 ### Purple Agent (Assessee)
 
 The purple agent simulates the challenger agent that the green referee evaluates, exercising A2A/MCP integrations and providing stress-test scenarios.
@@ -162,6 +173,30 @@ The purple agent simulates the challenger agent that the green referee evaluates
 2. Reasoning loop iterates, invoking tools through A2A/MCP layers
 3. Interactions stream to the assessor for scoring and trace capture
 4. Registry entry plus trace log closes the loop for judges
+
+## Running the CYRA Green Agent
+The CYRA Green Agent is packaged as a Docker container and can be run end-to-end without manual intervention.
+
+### Pull and run the Docker image
+## Docker Image
+
+docker.io/erinjerri/cyra-green-agent:latest
+
+```bash
+docker pull erinjerri/cyra-green-agent:latest
+docker run erinjerri/cyra-green-agent:latest
+
+## Demo
+
+A short demo video (≤3 minutes) showcasing the CYRA Green Agent end-to-end flow:
+
+https://youtu.be/RiCsyp49Qn0
+
+## Demo
+
+A short demo video (≤3 minutes) showcasing the CYRA Green Agent end-to-end flow:
+
+https://youtu.be/RiCsyp49Qn0
 
 ## Project Structure
 
@@ -268,68 +303,6 @@ CYRA-AgentBeatsHackathon/
     └── deploy.sh
 ```
 
-## Installation
-
-```bash
-# Clone the repository
-git clone https://github.com/erinjerri/CYRA-AgentBeatsHackathon.git
-cd CYRA-AgentBeatsHackathon
-
-# Setup backend
-cd backend
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-pip install -r requirements.txt
-
-# Setup visionOS client (requires Xcode 15+ and visionOS simulator)
-cd ../client/visionOS
-open CYRA.xcodeproj
-```
-
-## Usage
-
-### Running the Backend
-
-```bash
-cd backend
-uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
-```
-
-### Running the visionOS Client
-
-1. Open `CYRA.xcodeproj` in Xcode
-2. Select the visionOS simulator as target
-3. Build and run (Cmd+R)
-
-### Running Evaluations
-
-```bash
-cd evaluation
-python scripts/run_evaluation.py --dataset visionos_scenarios.json
-```
-
-## Evaluation Rubric
-
-The CYRA framework evaluates agents across these dimensions:
-
-1. **State Matching Accuracy** - How well the agent state aligns with expected checkpoints
-2. **Action Compliance** - Validity and safety of tool usage and timing
-3. **Trace Completeness** - Quality and completeness of execution logs
-4. **Multi-modal Integration** - Effective use of speech, vision, and context data
-5. **Deterministic Scoring** - Consistency and verifiability of evaluation outcomes
-
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## Acknowledgments
 
@@ -349,10 +322,3 @@ If you use CYRA in your research, please cite:
   year={2025},
   url={https://github.com/erinjerri/CYRA-AgentBeatsHackathon}
 }
-```
-
----
-
-> [!NOTE]
-> This README follows GitHub's best-practice recommendations for structure, clarity, and completeness. See [About READMEs](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-readmes).
->
