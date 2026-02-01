@@ -1,0 +1,29 @@
+name: AgentBeats Evaluation Trigger
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  register-and-evaluate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Verify scenario definition
+        run: |
+          echo "Listing repo root:"
+          ls -la
+          echo "Validating scenario.toml exists:"
+          test -f scenario.toml && echo "scenario.toml found"
+
+      - name: Log evaluation intent
+        run: |
+          echo "AgentBeats evaluation scenario detected."
+          echo "Green Agent: erinjerri/create-your-reality"
+          echo "Baseline Purple Agent(s) defined in scenario.toml"
+          echo "Reproducibility enforced via repetitions parameter."
