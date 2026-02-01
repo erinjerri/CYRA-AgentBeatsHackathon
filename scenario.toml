@@ -1,0 +1,11 @@
+scenario_id = "cyra_baseline_v1"
+
+[green_agent]
+id = "erinjerri/create-your-reality"
+
+[[purple_agents]]
+id = "erinjerri/<YOUR_PURPLE_AGENT_ID>"
+
+[evaluation]
+repetitions = 2
+timeout_seconds = 300
